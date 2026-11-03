@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: spotify
+name: Spotify Premium
+category: music
+domains:
+  - spotify.com
+homepage: https://www.spotify.com
+thirdPartyBilling:
+  - carrier
+  - other
+actions:
+  cancel:
+    level: info
+    url: https://www.spotify.com/account/subscription/
+    instructions:
+      - Sign in to your Spotify account page in this browser.
+      - Open "Manage your plan".
+      - Choose "Cancel Premium" and confirm. Your account switches to Spotify Free at the end of the billing period.
+    notes: >-
+      Cancelling Premium does not delete your account or playlists. If Premium is billed by a
+      partner (for example a mobile carrier), cancel with the partner.
+  pause:
+    availability: unknown
+verification:
+  status: unverified

@@ -1,0 +1,117 @@
+import { daysUntil, formatMoney, formatRecurring, nextChargeOn, recipeMatchPatterns, toIsoDate } from '@metonic/core';
+import { dismissDetection, recordDetection, trackDetection } from '../src/actions';
+import type { Message } from '../src/messages';
+import { recipes } from '../src/recipes';
+import { pendingDetections, sentReminders, settings, subscriptions } from '../src/storage';
+
+const DETECTOR_ID = 'metonic-checkout-detector';
+const REMINDER_ALARM = 'metonic-reminders';
+const ALL_SITES = '<all_urls>';
+
+export default defineBackground(() => {
+  browser.runtime.onInstalled.addListener(() => void setup());
+  browser.runtime.onStartup.addListener(() => void setup());
+
+  browser.permissions.onAdded.addListener(() => void registerDetector());
+  browser.permissions.onRemoved.addListener(() => void registerDetector());
+
+  browser.runtime.onMessage.addListener((message: Message) => {
+    if (message.type === 'checkout-detected') void onCheckoutDetected(message);
+  });
+
+  browser.notifications.onButtonClicked.addListener((id, buttonIndex) => void onNotificationButton(id, buttonIndex));
+
+  browser.alarms.onAlarm.addListener((alarm) => {
+    if (alarm.name === REMINDER_ALARM) void sendReminders();
+  });
+
+  pendingDetections.watch((pending) => void updateBadge(pending?.length ?? 0));
+});
+
+async function setup() {
+  await registerDetector();
+  await browser.alarms.create(REMINDER_ALARM, { periodInMinutes: 12 * 60, delayInMinutes: 1 });
+  await updateBadge((await pendingDetections.getValue()).length);
+}
+
+/** (Re)register the checkout detector on recipe domains, or everywhere if the user opted in. */
+async function registerDetector() {
+  const universal = await browser.permissions.contains({ origins: [ALL_SITES] });
+  const matches = universal ? [ALL_SITES] : recipeMatchPatterns(recipes);
+  const script = {
+    id: DETECTOR_ID,
+    js: ['content-scripts/checkout.js'],
+    matches,
+    runAt: 'document_idle' as const,
+  };
+  const existing = await browser.scripting.getRegisteredContentScripts({ ids: [DETECTOR_ID] });
+  if (existing.length > 0) await browser.scripting.updateContentScripts([script]);
+  else await browser.scripting.registerContentScripts([script]);
+}
+
+async function onCheckoutDetected(message: Message) {
+  const entry = await recordDetection(message.page, message.detection);
+  if (!entry) return;
+
+  const price = entry.detection.recurring;
+  const trial = entry.detection.trial;
+  const details = [
+    price && formatRecurring(price.price, price.cycle),
+    trial && (trial.days ? `${trial.days}-day free trial` : 'free trial'),
+  ]
+    .filter(Boolean)
+    .join(' · ');
+
+  await browser.notifications.create(`detect:${entry.key}`, {
+    type: 'basic',
+    iconUrl: browser.runtime.getURL('/icon/128.png'),
+    title: `Subscribing to ${entry.name}?`,
+    message: details ? `${details}. Track it in Metonic?` : 'Track it in Metonic?',
+    buttons: [{ title: 'Track it' }, { title: 'Not now' }],
+    requireInteraction: true,
+  });
+}
+
+async function onNotificationButton(notificationId: string, buttonIndex: number) {
+  if (!notificationId.startsWith('detect:')) return;
+  const key = notificationId.slice('detect:'.length);
+  if (buttonIndex === 0) await trackDetection(key);
+  else await dismissDetection(key);
+  await browser.notifications.clear(notificationId);
+}
+
+async function sendReminders() {
+  const { reminderDays } = await settings.getValue();
+  const today = toIsoDate(new Date());
+  const sent = { ...(await sentReminders.getValue()) };
+
+  for (const sub of await subscriptions.getValue()) {
+    const chargeOn = nextChargeOn(sub, today);
+    if (!chargeOn) continue;
+    const days = daysUntil(chargeOn);
+    if (days < 0 || days > reminderDays) continue;
+
+    const key = `${sub.id}:${chargeOn}`;
+    if (sent[key]) continue;
+    sent[key] = true;
+
+    const when = days === 0 ? 'today' : days === 1 ? 'tomorrow' : `in ${days} days`;
+    const what = sub.status === 'trial' ? 'Free trial ends' : 'Renews';
+    await browser.notifications.create(`reminder:${key}`, {
+      type: 'basic',
+      iconUrl: browser.runtime.getURL('/icon/128.png'),
+      title: `${sub.name}: ${what} ${when}`,
+      message:
+        sub.price.amountMinor > 0
+          ? `You'll be charged ${formatMoney(sub.price)} on ${chargeOn}.`
+          : `Next charge on ${chargeOn}.`,
+    });
+  }
+
+  await sentReminders.setValue(sent);
+}
+
+async function updateBadge(count: number) {
+  await browser.action.setBadgeText({ text: count > 0 ? String(count) : '' });
+  await browser.action.setBadgeBackgroundColor({ color: '#4f46e5' });
+}

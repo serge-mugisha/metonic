@@ -1,0 +1,32 @@
+{
+  "name": "metonic",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Open-source, local-first subscription manager. Track every subscription, get warned before trials convert, and cancel or pause with community-maintained recipes and the AI of your choice.",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "recipes",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "npm run dev -w @metonic/extension",
+    "build": "npm run build -w @metonic/extension",
+    "zip": "npm run zip -w @metonic/extension",
+    "recipes:validate": "npm run validate -w @metonic/recipes",
+    "recipes:schema": "npm run schema -w @metonic/recipes",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  }
+}

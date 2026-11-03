@@ -1,0 +1,911 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "number",
+      "const": 0
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "streaming",
+        "music",
+        "gaming",
+        "news",
+        "software",
+        "cloud-storage",
+        "ai",
+        "fitness",
+        "food",
+        "shopping",
+        "education",
+        "other"
+      ]
+    },
+    "domains": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(?!-)[a-z0-9-]+(\\.[a-z0-9-]+)+$"
+      }
+    },
+    "homepage": {
+      "type": "string",
+      "format": "uri"
+    },
+    "thirdPartyBilling": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "apple",
+          "google-play",
+          "amazon",
+          "roku",
+          "carrier",
+          "other"
+        ]
+      }
+    },
+    "actions": {
+      "type": "object",
+      "properties": {
+        "cancel": {
+          "type": "object",
+          "properties": {
+            "level": {
+              "type": "string",
+              "enum": [
+                "info",
+                "guided",
+                "automated"
+              ]
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "instructions": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "steps": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "do": {
+                        "type": "string",
+                        "const": "navigate"
+                      },
+                      "url": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "say": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "do",
+                      "url"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "do": {
+                        "type": "string",
+                        "const": "click"
+                      },
+                      "target": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "role": {
+                            "type": "string",
+                            "enum": [
+                              "button",
+                              "link",
+                              "checkbox",
+                              "radio",
+                              "menuitem",
+                              "tab",
+                              "option",
+                              "textbox"
+                            ]
+                          },
+                          "selector": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "say": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "do",
+                      "target",
+                      "say"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "do": {
+                        "type": "string",
+                        "const": "choose"
+                      },
+                      "target": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "role": {
+                            "type": "string",
+                            "enum": [
+                              "button",
+                              "link",
+                              "checkbox",
+                              "radio",
+                              "menuitem",
+                              "tab",
+                              "option",
+                              "textbox"
+                            ]
+                          },
+                          "selector": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "say": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "do",
+                      "target",
+                      "say"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "do": {
+                        "type": "string",
+                        "const": "expect"
+                      },
+                      "text": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "say": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "do",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "do": {
+                        "type": "string",
+                        "const": "confirm"
+                      },
+                      "say": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "do",
+                      "say"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "notes": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "level",
+            "url",
+            "instructions"
+          ],
+          "additionalProperties": false
+        },
+        "pause": {
+          "type": "object",
+          "properties": {
+            "availability": {
+              "type": "string",
+              "enum": [
+                "native",
+                "retention-offer",
+                "none",
+                "unknown"
+              ]
+            },
+            "maxDuration": {
+              "type": "string",
+              "format": "duration",
+              "pattern": "^P(?:(\\d+W)|(?!.*W)(?=\\d|T\\d)(\\d+Y)?(\\d+M)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+([.,]\\d+)?S)?)?)$"
+            },
+            "autoResumes": {
+              "type": "boolean"
+            },
+            "action": {
+              "type": "object",
+              "properties": {
+                "level": {
+                  "type": "string",
+                  "enum": [
+                    "info",
+                    "guided",
+                    "automated"
+                  ]
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "instructions": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "steps": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "do": {
+                            "type": "string",
+                            "const": "navigate"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "say": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "do",
+                          "url"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "do": {
+                            "type": "string",
+                            "const": "click"
+                          },
+                          "target": {
+                            "type": "object",
+                            "properties": {
+                              "text": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "role": {
+                                "type": "string",
+                                "enum": [
+                                  "button",
+                                  "link",
+                                  "checkbox",
+                                  "radio",
+                                  "menuitem",
+                                  "tab",
+                                  "option",
+                                  "textbox"
+                                ]
+                              },
+                              "selector": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "say": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "do",
+                          "target",
+                          "say"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "do": {
+                            "type": "string",
+                            "const": "choose"
+                          },
+                          "target": {
+                            "type": "object",
+                            "properties": {
+                              "text": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "role": {
+                                "type": "string",
+                                "enum": [
+                                  "button",
+                                  "link",
+                                  "checkbox",
+                                  "radio",
+                                  "menuitem",
+                                  "tab",
+                                  "option",
+                                  "textbox"
+                                ]
+                              },
+                              "selector": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "say": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "do",
+                          "target",
+                          "say"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "do": {
+                            "type": "string",
+                            "const": "expect"
+                          },
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "say": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "do",
+                          "text"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "do": {
+                            "type": "string",
+                            "const": "confirm"
+                          },
+                          "say": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "do",
+                          "say"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ]
+                  }
+                },
+                "notes": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "level",
+                "url",
+                "instructions"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "availability"
+          ],
+          "additionalProperties": false
+        },
+        "resume": {
+          "type": "object",
+          "properties": {
+            "level": {
+              "type": "string",
+              "enum": [
+                "info",
+                "guided",
+                "automated"
+              ]
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "instructions": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "steps": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "do": {
+                        "type": "string",
+                        "const": "navigate"
+                      },
+                      "url": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "say": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "do",
+                      "url"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "do": {
+                        "type": "string",
+                        "const": "click"
+                      },
+                      "target": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "role": {
+                            "type": "string",
+                            "enum": [
+                              "button",
+                              "link",
+                              "checkbox",
+                              "radio",
+                              "menuitem",
+                              "tab",
+                              "option",
+                              "textbox"
+                            ]
+                          },
+                          "selector": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "say": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "do",
+                      "target",
+                      "say"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "do": {
+                        "type": "string",
+                        "const": "choose"
+                      },
+                      "target": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "role": {
+                            "type": "string",
+                            "enum": [
+                              "button",
+                              "link",
+                              "checkbox",
+                              "radio",
+                              "menuitem",
+                              "tab",
+                              "option",
+                              "textbox"
+                            ]
+                          },
+                          "selector": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "say": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "do",
+                      "target",
+                      "say"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "do": {
+                        "type": "string",
+                        "const": "expect"
+                      },
+                      "text": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "say": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "do",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "do": {
+                        "type": "string",
+                        "const": "confirm"
+                      },
+                      "say": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "do",
+                      "say"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "notes": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "level",
+            "url",
+            "instructions"
+          ],
+          "additionalProperties": false
+        },
+        "changePlan": {
+          "type": "object",
+          "properties": {
+            "level": {
+              "type": "string",
+              "enum": [
+                "info",
+                "guided",
+                "automated"
+              ]
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "instructions": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "steps": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "do": {
+                        "type": "string",
+                        "const": "navigate"
+                      },
+                      "url": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "say": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "do",
+                      "url"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "do": {
+                        "type": "string",
+                        "const": "click"
+                      },
+                      "target": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "role": {
+                            "type": "string",
+                            "enum": [
+                              "button",
+                              "link",
+                              "checkbox",
+                              "radio",
+                              "menuitem",
+                              "tab",
+                              "option",
+                              "textbox"
+                            ]
+                          },
+                          "selector": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "say": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "do",
+                      "target",
+                      "say"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "do": {
+                        "type": "string",
+                        "const": "choose"
+                      },
+                      "target": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "role": {
+                            "type": "string",
+                            "enum": [
+                              "button",
+                              "link",
+                              "checkbox",
+                              "radio",
+                              "menuitem",
+                              "tab",
+                              "option",
+                              "textbox"
+                            ]
+                          },
+                          "selector": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "say": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "do",
+                      "target",
+                      "say"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "do": {
+                        "type": "string",
+                        "const": "expect"
+                      },
+                      "text": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "say": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "do",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "do": {
+                        "type": "string",
+                        "const": "confirm"
+                      },
+                      "say": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "do",
+                      "say"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "notes": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "level",
+            "url",
+            "instructions"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "verification": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "unverified",
+            "verified",
+            "broken"
+          ]
+        },
+        "lastVerified": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "regions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          }
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "maintainers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "category",
+    "domains",
+    "homepage",
+    "actions",
+    "verification"
+  ],
+  "additionalProperties": false
+}

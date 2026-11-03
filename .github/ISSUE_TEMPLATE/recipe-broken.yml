@@ -1,0 +1,34 @@
+name: Recipe broken
+description: A service's cancel/pause steps no longer match what you see.
+title: "[recipe broken] <service>"
+labels: [recipe, broken]
+body:
+  - type: input
+    id: service
+    attributes:
+      label: Service (recipe id)
+      placeholder: netflix
+    validations:
+      required: true
+  - type: dropdown
+    id: action
+    attributes:
+      label: Which action?
+      options: [cancel, pause, resume, changePlan]
+    validations:
+      required: true
+  - type: input
+    id: region
+    attributes:
+      label: Country
+      description: Flows differ by country. ISO code is fine.
+      placeholder: US
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What did you see instead?
+      description: Which step failed, and what the page shows now (button text, new screens). Screenshots welcome; blur personal info.
+    validations:
+      required: true

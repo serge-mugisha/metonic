@@ -1,0 +1,21 @@
+name: Recipe request
+description: Ask for support for a service. (Even better, add it yourself; see recipes/README.md.)
+title: "[recipe] <service>"
+labels: [recipe, request]
+body:
+  - type: input
+    id: service
+    attributes:
+      label: Service
+      placeholder: Xbox Game Pass
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Account or cancel page URL, if you know it
+  - type: textarea
+    id: details
+    attributes:
+      label: Anything else?
+      description: Does it offer a pause? Can it be billed through Apple/Google/a carrier? Which countries?

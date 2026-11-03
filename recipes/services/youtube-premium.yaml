@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: youtube-premium
+name: YouTube Premium
+category: streaming
+domains:
+  - youtube.com
+homepage: https://www.youtube.com/premium
+thirdPartyBilling:
+  - apple
+actions:
+  cancel:
+    level: info
+    url: https://www.youtube.com/paid_memberships
+    instructions:
+      - Sign in to YouTube in this browser.
+      - Open "Purchases and memberships".
+      - Under YouTube Premium, choose "Deactivate" and follow the prompts.
+    notes: If you subscribed on an iPhone or iPad, cancel from your Apple ID subscriptions instead.
+  pause:
+    availability: retention-offer
+    autoResumes: true
+verification:
+  status: unverified

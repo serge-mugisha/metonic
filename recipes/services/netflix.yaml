@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: netflix
+name: Netflix
+category: streaming
+domains:
+  - netflix.com
+homepage: https://www.netflix.com
+thirdPartyBilling:
+  - carrier
+  - other
+actions:
+  cancel:
+    level: info
+    url: https://www.netflix.com/cancelplan
+    instructions:
+      - Sign in to Netflix in this browser.
+      - Open the cancel page (Account > Membership > Cancel membership).
+      - Click "Finish cancellation". You keep access until the end of the current billing period.
+    notes: >-
+      If Netflix is billed through your TV, internet or phone provider, cancel with that
+      provider instead.
+  pause:
+    availability: unknown
+verification:
+  status: unverified
