@@ -141,8 +141,8 @@ describe('extension smoke test', () => {
     expect(await pending()).toEqual([]);
   });
 
-  it('opens the popup and settings pages without errors', async () => {
-    for (const file of ['popup.html', 'options.html'] as const) {
+  it('opens the popup, settings and overview pages without errors', async () => {
+    for (const file of ['popup.html', 'options.html', 'dashboard.html'] as const) {
       const page = await h.openExtensionPage(file);
       expect(await page.$eval('h1', (el) => el.textContent)).toMatch(/Metonic/);
       await page.close();

@@ -80,7 +80,14 @@ export function App() {
         <button type="button" className="secondary" onClick={() => setEditing({ draft: emptyDraft() })}>
           Add manually
         </button>
-        <button type="button" className="link push-right" onClick={() => void browser.runtime.openOptionsPage()}>
+        <button
+          type="button"
+          className="link push-right"
+          onClick={() => void browser.tabs.create({ url: browser.runtime.getURL('/dashboard.html') })}
+        >
+          Overview
+        </button>
+        <button type="button" className="link" onClick={() => void browser.runtime.openOptionsPage()}>
           Settings
         </button>
       </div>

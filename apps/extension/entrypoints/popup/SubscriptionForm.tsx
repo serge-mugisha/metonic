@@ -1,5 +1,8 @@
 import {
   type BillingCycle,
+  CATEGORIES,
+  CATEGORY_LABEL,
+  type Category,
   nextChargeOn,
   parseAmountInput,
   type Subscription,
@@ -9,6 +12,7 @@ import {
 } from '@metonic/core';
 import { useState } from 'react';
 import { addSubscription, removeSubscription, replaceSubscription, type SubscriptionFields } from '../../src/actions';
+import { categoryOf } from '../../src/recipes';
 
 /** Form state: everything as strings, the way inputs hold it. */
 export interface Draft {
@@ -22,6 +26,8 @@ export interface Draft {
   nextChargeOn: string;
   pausedUntil: string;
   notes: string;
+  /** '' = automatic (from the service's recipe). */
+  category: Category | '';
   sourceUrl?: string;
 }
 
@@ -36,6 +42,7 @@ export function emptyDraft(): Draft {
     nextChargeOn: '',
     pausedUntil: '',
     notes: '',
+    category: '',
   };
 }
 
@@ -53,6 +60,7 @@ export function draftFrom(sub: Subscription): Draft {
     nextChargeOn: nextChargeOn({ ...sub, status: 'active' }, today) ?? '',
     pausedUntil: sub.pausedUntil ?? '',
     notes: sub.notes ?? '',
+    category: sub.category ?? '',
     ...(sub.sourceUrl && { sourceUrl: sub.sourceUrl }),
   };
 }
@@ -65,6 +73,7 @@ function toFields(draft: Draft, existing?: Subscription): SubscriptionFields {
   return {
     name: draft.name.trim(),
     ...(draft.serviceId && { serviceId: draft.serviceId }),
+    ...(draft.category && { category: draft.category }),
     price: {
       amountMinor: parseAmountInput(draft.amount, normalizeCurrency(draft.currency)) ?? 0,
       currency: normalizeCurrency(draft.currency),
@@ -177,6 +186,17 @@ export function SubscriptionForm({
           <input type="date" value={draft.pausedUntil} onChange={(e) => set('pausedUntil', e.target.value)} />
         </label>
       )}
+      <label>
+        Category
+        <select value={draft.category} onChange={(e) => set('category', e.target.value as Category | '')}>
+          <option value="">Automatic ({CATEGORY_LABEL[categoryOf({ serviceId: draft.serviceId })]})</option>
+          {CATEGORIES.map((c) => (
+            <option key={c} value={c}>
+              {CATEGORY_LABEL[c]}
+            </option>
+          ))}
+        </select>
+      </label>
       <label>
         Notes
         <textarea rows={2} value={draft.notes} onChange={(e) => set('notes', e.target.value)} />

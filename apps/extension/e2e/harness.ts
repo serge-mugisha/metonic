@@ -9,7 +9,10 @@ export interface Harness {
   worker: WebWorker;
   /** Open `url` in a tab where every request to its origin is answered with `html`; nothing hits the network. */
   openFakeSite(url: string, html: string): Promise<Page>;
-  openExtensionPage(file: 'popup.html' | 'options.html', viewport?: { width: number; height: number }): Promise<Page>;
+  openExtensionPage(
+    file: 'popup.html' | 'options.html' | 'dashboard.html',
+    viewport?: { width: number; height: number },
+  ): Promise<Page>;
   storage<T = Record<string, unknown>>(keys?: string[]): Promise<T>;
   clearStorage(): Promise<void>;
   badge(): Promise<string>;

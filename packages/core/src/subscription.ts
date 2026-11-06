@@ -4,6 +4,38 @@ export type BillingCycle = 'weekly' | 'monthly' | 'quarterly' | 'yearly';
 
 export type SubscriptionStatus = 'trial' | 'active' | 'paused' | 'cancelled';
 
+export const CATEGORIES = [
+  'streaming',
+  'music',
+  'gaming',
+  'news',
+  'software',
+  'cloud-storage',
+  'ai',
+  'fitness',
+  'food',
+  'shopping',
+  'education',
+  'other',
+] as const;
+
+export type Category = (typeof CATEGORIES)[number];
+
+export const CATEGORY_LABEL: Record<Category, string> = {
+  streaming: 'Streaming',
+  music: 'Music',
+  gaming: 'Gaming',
+  news: 'News',
+  software: 'Software',
+  'cloud-storage': 'Cloud storage',
+  ai: 'AI',
+  fitness: 'Fitness',
+  food: 'Food',
+  shopping: 'Shopping',
+  education: 'Education',
+  other: 'Other',
+};
+
 /** Where we learned about a subscription. */
 export type SubscriptionSource = 'detected' | 'manual' | 'imported';
 
@@ -12,6 +44,8 @@ export interface Subscription {
   /** Recipe id when the service is known to Metonic, e.g. "netflix". */
   serviceId?: string;
   name: string;
+  /** User-chosen category; when absent the recipe's category (or "other") applies. */
+  category?: Category;
   price: Money;
   cycle: BillingCycle;
   status: SubscriptionStatus;

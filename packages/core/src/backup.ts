@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Subscription } from './subscription';
+import { CATEGORIES, type Subscription } from './subscription';
 
 export const EXPORT_FORMAT = 'metonic-export';
 export const EXPORT_VERSION = 1;
@@ -10,6 +10,7 @@ export const SubscriptionSchema = z.object({
   id: z.string().min(1),
   serviceId: z.string().optional(),
   name: z.string().min(1),
+  category: z.enum(CATEGORIES).optional(),
   price: z.object({
     amountMinor: z.number().int().nonnegative(),
     currency: z.string().regex(/^[A-Z]{3}$/, 'expected an ISO 4217 code like USD'),
