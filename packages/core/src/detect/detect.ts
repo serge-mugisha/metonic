@@ -29,7 +29,8 @@ export interface CheckoutDetection {
   trial?: { days?: number };
 }
 
-const CHECKOUT_PATH = /\/(checkout|subscribe|signup|sign-up|payment|billing|plans?|join|upgrade|membership|purchase)\b/i;
+const CHECKOUT_PATH =
+  /\/(checkout|subscribe|signup|sign-up|payment|billing|plans?|join|upgrade|membership|purchase)\b/i;
 
 const SUBSCRIPTION_VOCAB = [
   /\bsubscri(be|ption)\b/i,

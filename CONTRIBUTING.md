@@ -21,6 +21,7 @@ npm install
 npm run dev          # extension with hot reload
 npm test             # unit tests (Vitest)
 npm run typecheck
+npm run lint         # Biome; `npm run format` fixes formatting and import order
 npm run recipes:validate
 npm run build
 ```
@@ -40,7 +41,7 @@ Guidelines:
 ## Pull requests
 
 - One topic per PR. Link the issue it closes.
-- CI must pass: tests, typecheck, recipe validation, build.
+- CI must pass: lint, tests, typecheck, recipe validation, build.
 - By contributing you agree your contribution is licensed under AGPL-3.0.
 
 ## Security issues

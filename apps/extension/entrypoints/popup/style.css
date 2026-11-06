@@ -3,7 +3,9 @@
   --accent: #4f46e5;
   --muted: #6b7280;
   --border: color-mix(in srgb, currentColor 15%, transparent);
-  font: 14px/1.4 system-ui, sans-serif;
+  font:
+    14px / 1.4 system-ui,
+    sans-serif;
 }
 
 body {

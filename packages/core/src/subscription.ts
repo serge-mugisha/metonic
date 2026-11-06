@@ -58,9 +58,7 @@ export function monthlyTotals(subs: Subscription[]): Record<string, number> {
 }
 
 export function formatMoney(money: Money, locale?: string): string {
-  return new Intl.NumberFormat(locale, { style: 'currency', currency: money.currency }).format(
-    money.amountMinor / 100,
-  );
+  return new Intl.NumberFormat(locale, { style: 'currency', currency: money.currency }).format(money.amountMinor / 100);
 }
 
 export const CYCLE_UNIT: Record<BillingCycle, string> = {

@@ -1,7 +1,7 @@
-import { addCycle, addDays, findRecipeForHost, toIsoDate, type Subscription } from '@metonic/core';
+import { addCycle, addDays, findRecipeForHost, type Subscription, toIsoDate } from '@metonic/core';
 import type { CheckoutDetection } from '@metonic/core/detect';
 import { recipes } from './recipes';
-import { dismissedDetections, pendingDetections, subscriptions, type PendingDetection } from './storage';
+import { dismissedDetections, type PendingDetection, pendingDetections, subscriptions } from './storage';
 
 const DISMISS_FOR_DAYS = 30;
 const MAX_PENDING = 20;
