@@ -24,7 +24,7 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "biome check .",
     "format": "biome check --write .",
-    "e2e": "vitest run --config apps/extension/e2e/vitest.config.ts"
+    "e2e": "npm run build:e2e -w apps/extension && vitest run --config apps/extension/e2e/vitest.config.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.6",

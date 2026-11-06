@@ -1,15 +1,18 @@
-import { daysUntil, formatMoney, formatRecurring, nextChargeOn, recipeMatchPatterns, toIsoDate } from '@metonic/core';
+import { daysUntil, formatMoney, formatRecurring, nextChargeOn, toIsoDate } from '@metonic/core';
 import { dismissDetection, recordDetection, trackDetection } from '../src/actions';
 import type { DetectedReply, Message } from '../src/messages';
-import { recipes } from '../src/recipes';
+import { ALL_SITES, detectionAccess } from '../src/permissions';
 import { pendingDetections, sentReminders, settings, subscriptions } from '../src/storage';
 
 const DETECTOR_ID = 'metonic-checkout-detector';
 const REMINDER_ALARM = 'metonic-reminders';
-const ALL_SITES = '<all_urls>';
 
 export default defineBackground(() => {
-  browser.runtime.onInstalled.addListener(() => void setup());
+  browser.runtime.onInstalled.addListener(({ reason }) => {
+    void setup();
+    // Site access is optional, so first-run explains detection and asks for it.
+    if (reason === 'install') void browser.tabs.create({ url: browser.runtime.getURL('/welcome.html') });
+  });
   browser.runtime.onStartup.addListener(() => void setup());
 
   browser.permissions.onAdded.addListener(() => void registerDetector());
@@ -42,17 +45,22 @@ async function setup() {
   await updateBadge((await pendingDetections.getValue()).length);
 }
 
-/** (Re)register the checkout detector on recipe domains, or everywhere if the user opted in. */
+/** (Re)register the checkout detector on the sites the user has allowed, or remove it if there are none. */
 async function registerDetector() {
-  const universal = await browser.permissions.contains({ origins: [ALL_SITES] });
-  const matches = universal ? [ALL_SITES] : recipeMatchPatterns(recipes);
+  const { universal, granted } = await detectionAccess();
+  const matches = universal ? [ALL_SITES] : granted;
+  const existing = await browser.scripting.getRegisteredContentScripts({ ids: [DETECTOR_ID] });
+
+  if (matches.length === 0) {
+    if (existing.length > 0) await browser.scripting.unregisterContentScripts({ ids: [DETECTOR_ID] });
+    return;
+  }
   const script = {
     id: DETECTOR_ID,
     js: ['content-scripts/checkout.js'],
     matches,
     runAt: 'document_idle' as const,
   };
-  const existing = await browser.scripting.getRegisteredContentScripts({ ids: [DETECTOR_ID] });
   if (existing.length > 0) await browser.scripting.updateContentScripts([script]);
   else await browser.scripting.registerContentScripts([script]);
 }

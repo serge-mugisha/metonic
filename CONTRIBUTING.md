@@ -24,7 +24,7 @@ npm run typecheck
 npm run lint         # Biome; `npm run format` fixes formatting and import order
 npm run recipes:validate
 npm run build
-npm run e2e          # browser smoke test against the build (downloads Chrome for Testing once)
+npm run e2e          # builds the e2e variant and runs browser tests (downloads Chrome for Testing once)
 ```
 
 Guidelines:

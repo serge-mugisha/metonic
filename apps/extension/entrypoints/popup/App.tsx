@@ -15,6 +15,7 @@ import { dismissDetection, trackDetection, updateSubscription } from '../../src/
 import { recipeById, recipes } from '../../src/recipes';
 import { takeSnapshot } from '../../src/snapshot';
 import { type PendingDetection, pendingDetections, subscriptions } from '../../src/storage';
+import { DetectionBanner } from '../../src/ui/DetectionAccess';
 import { useStorageItem } from '../../src/use-storage';
 import { type Draft, draftFrom, emptyDraft, SubscriptionForm } from './SubscriptionForm';
 
@@ -55,6 +56,8 @@ export function App() {
           {totals.length > 0 && <span> / month</span>}
         </p>
       </header>
+
+      <DetectionBanner />
 
       {pending.length > 0 && (
         <section>

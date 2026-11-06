@@ -1,6 +1,9 @@
+import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
 import { addCycle, type Subscription, toIsoDate } from '@metonic/core';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import type { PendingDetection } from '../src/storage';
+import { EXTENSION_DIR } from './chrome';
 import { type Harness, launch, waitFor } from './harness';
 
 // netflix.com is a recipe domain, so the detector runs there without the all-sites opt-in.
@@ -31,6 +34,22 @@ beforeEach(async () => {
 const pending = async () => (await h.storage<{ pendingDetections?: PendingDetection[] }>()).pendingDetections ?? [];
 
 describe('extension smoke test', () => {
+  it('opens the welcome page on install', async () => {
+    const welcome = await waitFor(async () => (await h.browser.pages()).find((p) => p.url().endsWith('/welcome.html')));
+    await welcome.waitForSelector('.ok');
+    // The e2e build starts with known services granted, so the page reports detection as on.
+    expect(await welcome.$eval('.ok', (el) => el.textContent)).toMatch(/Checkout detection is on/);
+    await welcome.close();
+  });
+
+  const productionManifest = path.resolve(EXTENSION_DIR, '..', 'chrome-mv3', 'manifest.json');
+  it.skipIf(!existsSync(productionManifest))('ships no required host permissions in the production build', () => {
+    // Adding host permissions in an update disables the extension until users accept them. See #41.
+    const manifest = JSON.parse(readFileSync(productionManifest, 'utf8'));
+    expect(manifest.host_permissions ?? []).toEqual([]);
+    expect(manifest.optional_host_permissions).toEqual(['<all_urls>']);
+  });
+
   it('registers the checkout detector on recipe domains', async () => {
     const scripts = await waitFor(async () => {
       const registered = await h.worker.evaluate(() => chrome.scripting.getRegisteredContentScripts());
