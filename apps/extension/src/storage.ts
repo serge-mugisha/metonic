@@ -1,5 +1,5 @@
-import type { CheckoutDetection } from '@metonic/core/detect';
 import type { Subscription } from '@metonic/core';
+import type { CheckoutDetection } from '@metonic/core/detect';
 
 /** A checkout we noticed and are asking the user about. */
 export interface PendingDetection {

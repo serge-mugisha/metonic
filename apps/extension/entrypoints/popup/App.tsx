@@ -11,10 +11,16 @@ import {
 } from '@metonic/core';
 import { detectCheckout } from '@metonic/core/detect';
 import { useEffect, useState } from 'react';
-import { addSubscription, dismissDetection, removeSubscription, trackDetection, updateSubscription } from '../../src/actions';
+import {
+  addSubscription,
+  dismissDetection,
+  removeSubscription,
+  trackDetection,
+  updateSubscription,
+} from '../../src/actions';
 import { recipeById, recipes } from '../../src/recipes';
 import { takeSnapshot } from '../../src/snapshot';
-import { pendingDetections, subscriptions, type PendingDetection } from '../../src/storage';
+import { type PendingDetection, pendingDetections, subscriptions } from '../../src/storage';
 import { useStorageItem } from '../../src/use-storage';
 
 const ALL_SITES = '<all_urls>';
@@ -60,8 +66,10 @@ export function App() {
         <AddForm draft={draft} onDone={() => setDraft(null)} />
       ) : (
         <div className="actions">
-          <button onClick={() => void trackThisPage().then(setDraft)}>Track this page</button>
-          <button className="secondary" onClick={() => setDraft(emptyDraft())}>
+          <button type="button" onClick={() => void trackThisPage().then(setDraft)}>
+            Track this page
+          </button>
+          <button type="button" className="secondary" onClick={() => setDraft(emptyDraft())}>
             Add manually
           </button>
         </div>
@@ -84,8 +92,10 @@ function PendingRow({ entry }: { entry: PendingDetection }) {
         </div>
       </div>
       <div className="row-actions">
-        <button onClick={() => void trackDetection(entry.key)}>Track</button>
-        <button className="secondary" onClick={() => void dismissDetection(entry.key)}>
+        <button type="button" onClick={() => void trackDetection(entry.key)}>
+          Track
+        </button>
+        <button type="button" className="secondary" onClick={() => void dismissDetection(entry.key)}>
           Dismiss
         </button>
       </div>
@@ -111,18 +121,24 @@ function SubscriptionRow({ sub }: { sub: Subscription }) {
       </div>
       <div className="row-actions">
         {cancel && (
-          <button className="secondary" title={cancel.instructions.join('\n')} onClick={() => void browser.tabs.create({ url: cancel.url })}>
+          <button
+            type="button"
+            className="secondary"
+            title={cancel.instructions.join('\n')}
+            onClick={() => void browser.tabs.create({ url: cancel.url })}
+          >
             Cancel…
           </button>
         )}
         <button
+          type="button"
           className="secondary"
           title="Mark as cancelled"
           onClick={() => void updateSubscription(sub.id, { status: 'cancelled' })}
         >
           ✓
         </button>
-        <button className="secondary" title="Remove" onClick={() => void removeSubscription(sub.id)}>
+        <button type="button" className="secondary" title="Remove" onClick={() => void removeSubscription(sub.id)}>
           ✕
         </button>
       </div>
@@ -188,7 +204,10 @@ function AddForm({ draft: initial, onDone }: { draft: Draft; onDone: () => void 
     await addSubscription({
       name: draft.name.trim(),
       ...(draft.serviceId && { serviceId: draft.serviceId }),
-      price: { amountMinor: Number.isFinite(amount) ? Math.round(amount * 100) : 0, currency: draft.currency.toUpperCase() },
+      price: {
+        amountMinor: Number.isFinite(amount) ? Math.round(amount * 100) : 0,
+        currency: draft.currency.toUpperCase(),
+      },
       cycle: draft.cycle,
       status: isTrial ? 'trial' : 'active',
       ...(isTrial && { trialEndsOn: draft.trialEndsOn }),
@@ -209,8 +228,18 @@ function AddForm({ draft: initial, onDone }: { draft: Draft; onDone: () => void 
     >
       <input required placeholder="Name" value={draft.name} onChange={(e) => set('name', e.target.value)} />
       <div className="inline">
-        <input inputMode="decimal" placeholder="Price" value={draft.amount} onChange={(e) => set('amount', e.target.value)} />
-        <input className="currency" maxLength={3} value={draft.currency} onChange={(e) => set('currency', e.target.value)} />
+        <input
+          inputMode="decimal"
+          placeholder="Price"
+          value={draft.amount}
+          onChange={(e) => set('amount', e.target.value)}
+        />
+        <input
+          className="currency"
+          maxLength={3}
+          value={draft.currency}
+          onChange={(e) => set('currency', e.target.value)}
+        />
         <select value={draft.cycle} onChange={(e) => set('cycle', e.target.value as BillingCycle)}>
           <option value="weekly">weekly</option>
           <option value="monthly">monthly</option>

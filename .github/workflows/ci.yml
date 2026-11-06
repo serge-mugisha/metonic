@@ -24,6 +24,7 @@ jobs:
         run: |
           npm run recipes:schema
           git diff --exit-code recipes/schema.json
+      - run: npm run lint
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
