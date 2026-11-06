@@ -6,6 +6,7 @@ import {
   monthlyTotals,
   nextChargeOn,
   nextRenewalFrom,
+  parseAmountInput,
   type Subscription,
 } from './subscription';
 
@@ -84,5 +85,28 @@ describe('daysUntil', () => {
     expect(daysUntil('2026-11-03', from)).toBe(0);
     expect(daysUntil('2026-11-10', from)).toBe(7);
     expect(daysUntil('2026-11-01', from)).toBe(-2);
+  });
+});
+
+describe('parseAmountInput', () => {
+  it.each([
+    ['12', 1200],
+    ['12.99', 1299],
+    ['12,99', 1299],
+    ['12.5', 1250],
+    ['1,234.50', 123450],
+    ['1.234,50', 123450],
+    ['1 234,50', 123450],
+    ['1,234', 123400],
+    ['$15.49', 1549],
+    ['15.49 USD', 1549],
+  ])('%s -> %i', (input, expected) => {
+    expect(parseAmountInput(input)).toBe(expected);
+  });
+
+  it('rejects text that is not a number', () => {
+    expect(parseAmountInput('')).toBeUndefined();
+    expect(parseAmountInput('free')).toBeUndefined();
+    expect(parseAmountInput('12a34')).toBeUndefined();
   });
 });

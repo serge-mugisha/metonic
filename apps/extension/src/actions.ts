@@ -1,4 +1,13 @@
-import { addCycle, addDays, findRecipeForHost, type Subscription, toIsoDate } from '@metonic/core';
+import {
+  addCycle,
+  addDays,
+  createExport,
+  findRecipeForHost,
+  type ImportResult,
+  mergeImport,
+  type Subscription,
+  toIsoDate,
+} from '@metonic/core';
 import type { CheckoutDetection } from '@metonic/core/detect';
 import { recipes } from './recipes';
 import { dismissedDetections, type PendingDetection, pendingDetections, subscriptions } from './storage';
@@ -75,12 +84,35 @@ export async function dismissDetection(key: string): Promise<void> {
   await dismissedDetections.setValue({ ...(await dismissedDetections.getValue()), [key]: new Date().toISOString() });
 }
 
-export async function addSubscription(input: Omit<Subscription, 'id' | 'createdAt' | 'updatedAt'>): Promise<void> {
+export async function addSubscription(input: SubscriptionFields): Promise<void> {
   const now = new Date().toISOString();
   await subscriptions.setValue([
     ...(await subscriptions.getValue()),
     { ...input, id: crypto.randomUUID(), createdAt: now, updatedAt: now },
   ]);
+}
+
+export type SubscriptionFields = Omit<Subscription, 'id' | 'createdAt' | 'updatedAt'>;
+
+/** Replace every user-editable field of a subscription, keeping its identity. */
+export async function replaceSubscription(id: string, fields: SubscriptionFields): Promise<void> {
+  const now = new Date().toISOString();
+  await subscriptions.setValue(
+    (await subscriptions.getValue()).map((s) =>
+      s.id === id ? { ...fields, id, createdAt: s.createdAt, updatedAt: now } : s,
+    ),
+  );
+}
+
+export async function exportSubscriptions(): Promise<string> {
+  return JSON.stringify(createExport(await subscriptions.getValue()), null, 2);
+}
+
+/** Validates the whole file first, then writes once, so a bad file can't half-import. */
+export async function importSubscriptions(text: string): Promise<ImportResult> {
+  const result = mergeImport(text, await subscriptions.getValue());
+  await subscriptions.setValue(result.subscriptions);
+  return result;
 }
 
 export async function updateSubscription(id: string, patch: Partial<Subscription>): Promise<void> {

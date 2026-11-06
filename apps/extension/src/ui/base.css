@@ -1,0 +1,181 @@
+:root {
+  color-scheme: light dark;
+  --accent: #4f46e5;
+  --muted: #6b7280;
+  --warn: #b45309;
+  --border: color-mix(in srgb, currentColor 15%, transparent);
+  font:
+    14px / 1.4 system-ui,
+    sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  padding: 12px 14px 14px;
+}
+
+header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+h1 {
+  margin: 0;
+  font-size: 18px;
+}
+
+h2 {
+  margin: 14px 0 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.totals {
+  margin: 0;
+  font-weight: 600;
+}
+
+.totals span,
+.muted {
+  color: var(--muted);
+  font-weight: normal;
+  font-size: 12px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.row-actions,
+.actions {
+  display: flex;
+  gap: 6px;
+}
+
+.actions {
+  margin-top: 12px;
+}
+
+button {
+  font: inherit;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: transparent;
+  color: inherit;
+  border-color: var(--border);
+}
+
+.sub-form {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.sub-form input,
+.sub-form select,
+.sub-form textarea {
+  font: inherit;
+  padding: 4px 6px;
+}
+
+.sub-form label {
+  display: grid;
+  gap: 2px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.inline {
+  display: flex;
+  gap: 6px;
+}
+
+.inline input {
+  min-width: 0;
+  flex: 1;
+}
+
+.inline .currency {
+  flex: 0 0 48px;
+}
+
+.toggle {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.warn {
+  color: var(--warn);
+  font-size: 12px;
+  margin: 0;
+}
+
+.row-main {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+}
+
+.row-main:hover strong {
+  text-decoration: underline;
+}
+
+button.link {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  text-decoration: underline;
+  padding: 4px 0;
+}
+
+.push-right {
+  margin-left: auto;
+}
+
+button.danger {
+  color: #dc2626;
+}
+
+[aria-invalid="true"] {
+  outline: 2px solid #dc2626;
+}
+
+label.button {
+  font: inherit;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.inline-label input {
+  width: 4em;
+  font: inherit;
+}
