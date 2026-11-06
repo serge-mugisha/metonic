@@ -1,0 +1,13 @@
+{
+  "description": "Car rental: \"$45/day\" is not a subscription",
+  "source": "synthetic, modeled on a car rental checkout (2026)",
+  "url": "https://www.cars.example/reserve/checkout",
+  "title": "Reserve",
+  "lang": "en-US",
+  "hasCardField": true,
+  "text": "Compact car $45/day x 4 days = $180.00. Taxes $31.22. Pay now and save.\nCard number Expiration CVV\nReserve now",
+  "expected": {
+    "isLikelyCheckout": false,
+    "recurring": null
+  }
+}

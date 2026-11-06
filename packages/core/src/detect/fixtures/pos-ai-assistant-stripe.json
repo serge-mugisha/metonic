@@ -1,0 +1,19 @@
+{
+  "description": "Hosted Stripe Checkout for an AI assistant plan",
+  "source": "synthetic, modeled on a hosted Stripe Checkout page for an AI chat subscription (2026)",
+  "url": "https://pay.assistant.example/c/pay/cs_live_xxx",
+  "title": "Assistant Pro",
+  "lang": "en",
+  "hasCardField": true,
+  "text": "Subscribe to Assistant Pro\nUS$20.00 per month\nAssistant Pro US$20.00 Billed monthly\nSubtotal US$20.00 Tax US$0.00 Total due today US$20.00\nContact information Email Payment method Card information\nBy confirming your subscription, you allow Assistant Inc. to charge you for future payments in accordance with their terms. You can always cancel your subscription.\nSubscribe",
+  "expected": {
+    "isLikelyCheckout": true,
+    "recurring": {
+      "price": {
+        "amountMinor": 2000,
+        "currency": "USD"
+      },
+      "cycle": "monthly"
+    }
+  }
+}

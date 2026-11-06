@@ -1,0 +1,12 @@
+{
+  "description": "SaaS pricing page with monthly/yearly toggle",
+  "source": "synthetic, modeled on a SaaS pricing page (2026)",
+  "url": "https://www.saas.example/pricing",
+  "title": "Pricing",
+  "lang": "en",
+  "hasCardField": false,
+  "text": "Simple pricing. Billed monthly / Billed annually (save 20%)\nFree $0. Pro $12/month per seat. Business $24/month per seat. Enterprise: contact sales.\nAll plans include unlimited projects. Compare plans. Talk to sales",
+  "expected": {
+    "isLikelyCheckout": false
+  }
+}

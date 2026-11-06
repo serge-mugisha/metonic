@@ -1,0 +1,19 @@
+{
+  "description": "Dollar price on a Canadian locale resolves to CAD",
+  "source": "synthetic, modeled on a streaming service checkout, Canadian locale (2026)",
+  "url": "https://www.plus.example/en-ca/sign-up/payment",
+  "title": "Payment details",
+  "lang": "en-CA",
+  "hasCardField": true,
+  "text": "Choose how to pay\nStandard with Ads $8.99/month (plus applicable taxes)\nYour subscription will automatically renew each month. Cancel anytime.\nCard number Expiry CVV Postal code\nAgree & Subscribe",
+  "expected": {
+    "isLikelyCheckout": true,
+    "recurring": {
+      "price": {
+        "amountMinor": 899,
+        "currency": "CAD"
+      },
+      "cycle": "monthly"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "description": "UK pricing in \"a month\" phrasing with a free trial",
+  "source": "synthetic, modeled on an audiobook membership signup, UK (2026)",
+  "url": "https://www.books.example/co.uk/signup/payment",
+  "title": "Start your free trial",
+  "lang": "en-GB",
+  "hasCardField": true,
+  "text": "Start your 30-day free trial\n£8.99 a month after free trial. Cancel anytime.\nYour membership automatically renews. We'll remind you 7 days before your trial ends.\nCard number Name on card Expiry date\nStart your free trial",
+  "expected": {
+    "isLikelyCheckout": true,
+    "recurring": {
+      "price": {
+        "amountMinor": 899,
+        "currency": "GBP"
+      },
+      "cycle": "monthly"
+    },
+    "trial": {
+      "days": 30
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "description": "One-off checkout that advertises a membership trial in a side banner",
+  "source": "synthetic, modeled on a marketplace checkout with a membership upsell (2026)",
+  "url": "https://www.market.example/gp/buy/spc/checkout",
+  "title": "Place Your Order - Checkout",
+  "lang": "en-US",
+  "hasCardField": true,
+  "text": "Review items and shipping\nUSB-C cable 2-pack $12.99\nOrder total: $14.06\nTry Plus FREE for 30 days: get free delivery on this order. After your trial, Plus is $14.99/month. Cancel anytime.\nPayment method Visa ending in 4242 Add a credit or debit card\nPlace your order",
+  "expected": {
+    "isLikelyCheckout": false
+  },
+  "knownIssue": "An upsell banner on a one-off checkout looks exactly like a subscription checkout to the heuristics. Needs layout awareness or the AI pass (#24)."
+}

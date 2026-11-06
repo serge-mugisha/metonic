@@ -1,0 +1,12 @@
+{
+  "description": "Update card on file in billing settings",
+  "source": "synthetic, modeled on an account billing settings page (2026)",
+  "url": "https://account.example.com/billing/payment-methods",
+  "title": "Payment methods",
+  "lang": "en",
+  "hasCardField": true,
+  "text": "Payment methods\nAdd a card to use for purchases and subscriptions.\nCard number Expiration date Security code Billing address\nSave card",
+  "expected": {
+    "isLikelyCheckout": false
+  }
+}

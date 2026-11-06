@@ -34,7 +34,8 @@ Guidelines:
 - Keep `packages/core` browser-safe and free of extension APIs so it stays testable.
 - New permissions need a justification in the PR description. Broad host access is
   always opt-in.
-- Detection changes should come with test cases, ideally real page text.
+- Detection changes must keep every fixture in `packages/core/src/detect/fixtures` passing. Add a
+  fixture for the case you fixed (see the [capture guide](packages/core/src/detect/fixtures/README.md)).
 - Never add code that downloads and runs logic or recipes at runtime (Chrome Web Store
   policy and our security model).
 

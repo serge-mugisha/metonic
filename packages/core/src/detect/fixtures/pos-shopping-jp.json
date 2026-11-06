@@ -1,0 +1,19 @@
+{
+  "description": "Japanese yen price with \"/月\"",
+  "source": "synthetic, modeled on a shopping membership signup, Japanese locale (2026)",
+  "url": "https://www.shop.example.co.jp/membership/signup",
+  "title": "会員登録",
+  "lang": "ja",
+  "hasCardField": true,
+  "text": "プライム会員\n¥600/月\nいつでもキャンセル可能\nカード番号 有効期限\n登録する",
+  "expected": {
+    "isLikelyCheckout": true,
+    "recurring": {
+      "price": {
+        "amountMinor": 600,
+        "currency": "JPY"
+      },
+      "cycle": "monthly"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "description": "Video platform premium trial with a 1-month free trial",
+  "source": "synthetic, modeled on a video platform premium trial checkout (2026)",
+  "url": "https://www.video.example/premium/checkout",
+  "title": "Premium - Checkout",
+  "lang": "en",
+  "hasCardField": true,
+  "text": "Premium\n1-month free trial\nThen $13.99/month. Cancel anytime.\nRecurring billing. You'll be charged automatically every month after your trial ends on December 6.\nAdd card\nCard number MM/YY CVC\nStart trial",
+  "expected": {
+    "isLikelyCheckout": true,
+    "recurring": {
+      "price": {
+        "amountMinor": 1399,
+        "currency": "USD"
+      },
+      "cycle": "monthly"
+    },
+    "trial": {
+      "days": 30
+    }
+  }
+}

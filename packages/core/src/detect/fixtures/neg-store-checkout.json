@@ -1,0 +1,13 @@
+{
+  "description": "One-off physical goods checkout",
+  "source": "synthetic, modeled on an electronics store checkout (2026)",
+  "url": "https://shop.example.com/checkout/payment",
+  "title": "Checkout",
+  "lang": "en-US",
+  "hasCardField": true,
+  "text": "Order summary\nWireless headphones x1 $79.99\nShipping $5.99  Tax $6.12  Order total $92.10\nPayment Card number Expiration CVV\nPlace order",
+  "expected": {
+    "isLikelyCheckout": false,
+    "recurring": null
+  }
+}

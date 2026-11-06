@@ -1,0 +1,12 @@
+{
+  "description": "Account page listing the current plan, no payment step",
+  "source": "synthetic, modeled on a streaming service account page (2026)",
+  "url": "https://www.streaming.example/account/membership",
+  "title": "Account",
+  "lang": "en-US",
+  "hasCardField": false,
+  "text": "Membership & Billing\nStandard plan $17.99/month\nYour next billing date is December 3, 2026.\nVisa •••• 4242\nChange plan  Manage payment info  Cancel Membership",
+  "expected": {
+    "isLikelyCheckout": false
+  }
+}
