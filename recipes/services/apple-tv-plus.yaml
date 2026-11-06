@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: apple-tv-plus
+name: Apple TV+
+category: streaming
+domains:
+  - tv.apple.com
+homepage: https://tv.apple.com
+thirdPartyBilling: [apple, amazon, roku, other]
+actions:
+  cancel:
+    level: info
+    url: https://tv.apple.com/settings
+    instructions:
+      - Sign in to tv.apple.com with your Apple Account in this browser.
+      - Open Settings, find Subscriptions, and choose "Manage".
+      - Choose "Cancel Subscription" and confirm.
+    notes: >-
+      Apple TV+ is billed through your Apple Account, so you can also cancel on any Apple
+      device under Settings > your name > Subscriptions. If it came with an Apple One bundle,
+      change the bundle instead.
+  pause:
+    availability: none
+verification:
+  status: unverified

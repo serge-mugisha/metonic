@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: adobe-creative-cloud
+name: Adobe Creative Cloud
+category: software
+domains:
+  - adobe.com
+homepage: https://www.adobe.com/creativecloud.html
+thirdPartyBilling: [apple, other]
+actions:
+  cancel:
+    level: info
+    url: https://account.adobe.com/plans
+    instructions:
+      - Sign in to your Adobe account in this browser. This opens Plans.
+      - Choose "Manage plan", then "Cancel your plan".
+      - Pick a reason, review any early termination fee shown, continue past offers, and confirm.
+    notes: >-
+      The common "annual, billed monthly" plan charges an early termination fee if you cancel
+      more than 14 days after the start or renewal. The fee is shown before you confirm.
+  pause:
+    availability: retention-offer
+verification:
+  status: unverified

@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: chatgpt-plus
+name: ChatGPT Plus
+category: ai
+domains:
+  - chatgpt.com
+  - openai.com
+homepage: https://chatgpt.com
+thirdPartyBilling: [apple, google-play]
+actions:
+  cancel:
+    level: info
+    url: https://chatgpt.com/#settings/Account
+    instructions:
+      - Sign in to ChatGPT in this browser. This opens Settings.
+      - Under Account (or Subscription), choose "Manage" next to your plan.
+      - Choose "Cancel subscription" and confirm. Plus stays active until the end of the billing period.
+    notes: If you subscribed in the iPhone or Android app, cancel through the App Store or Google Play.
+  pause:
+    availability: none
+verification:
+  status: unverified

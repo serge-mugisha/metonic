@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: crunchyroll
+name: Crunchyroll
+category: streaming
+domains:
+  - crunchyroll.com
+homepage: https://www.crunchyroll.com
+thirdPartyBilling: [apple, google-play, amazon, roku, other]
+actions:
+  cancel:
+    level: info
+    url: https://www.crunchyroll.com/account/membership
+    instructions:
+      - Sign in to Crunchyroll in this browser and open Membership.
+      - Choose "Cancel Membership" and confirm. Premium stays active until the end of the billing period.
+  pause:
+    availability: none
+verification:
+  status: unverified

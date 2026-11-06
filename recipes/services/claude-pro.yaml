@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: claude-pro
+name: Claude Pro
+category: ai
+domains:
+  - claude.ai
+homepage: https://claude.ai
+thirdPartyBilling: [apple, google-play]
+actions:
+  cancel:
+    level: info
+    url: https://claude.ai/settings/billing
+    instructions:
+      - Sign in to Claude in this browser. This opens Settings > Billing.
+      - Choose "Cancel" next to your plan and confirm. Your plan stays active until the end of the billing period.
+    notes: If you subscribed in the iPhone or Android app, cancel through the App Store or Google Play.
+  pause:
+    availability: none
+verification:
+  status: unverified

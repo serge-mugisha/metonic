@@ -44,6 +44,8 @@ verification:
 | `name` | yes | Display name |
 | `category` | yes | `streaming`, `music`, `gaming`, `news`, `software`, `cloud-storage`, `ai`, `fitness`, `food`, `shopping`, `education`, `other` |
 | `domains` | yes | Bare hostnames (`netflix.com`). Subdomains match automatically. A domain can belong to only one recipe |
+| `accountDomains` | no | Shared account portals where the service is managed but not sold, e.g. `microsoft.com` for both Microsoft 365 and Xbox Game Pass. Action URLs may use them; several recipes can list the same one; never used for detection |
+| `detectOn` | no | Path prefixes where signups happen, e.g. `[/prime]` on amazon.com. When set, checkout detection only runs on those paths. Use it for big sites that also sell one-off things |
 | `homepage` | yes | `https` URL |
 | `thirdPartyBilling` | no | Channels that may bill this service instead: `apple`, `google-play`, `amazon`, `roku`, `carrier`, `other`. The UI tells users to cancel there |
 | `actions.cancel` / `resume` / `changePlan` | no | An [action](#actions) |

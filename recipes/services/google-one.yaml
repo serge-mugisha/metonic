@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: google-one
+name: Google One
+category: cloud-storage
+domains:
+  - one.google.com
+homepage: https://one.google.com
+thirdPartyBilling: [apple, other]
+actions:
+  cancel:
+    level: info
+    url: https://one.google.com/settings
+    instructions:
+      - Sign in to Google One with the right Google account in this browser.
+      - In Settings, choose "Cancel membership" and confirm.
+    notes: >-
+      Storage drops back to the free 15 GB at the end of the billing period. If you are over
+      the limit, some services (like Gmail) may stop receiving new data.
+  pause:
+    availability: none
+verification:
+  status: unverified

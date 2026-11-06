@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: xbox-game-pass
+name: Xbox Game Pass
+category: gaming
+domains:
+  - xbox.com
+accountDomains:
+  - microsoft.com
+homepage: https://www.xbox.com/xbox-game-pass
+thirdPartyBilling: [other]
+actions:
+  cancel:
+    level: info
+    url: https://account.microsoft.com/services
+    instructions:
+      - Sign in to your Microsoft account in this browser. This opens Services & subscriptions.
+      - Find Game Pass and choose "Manage".
+      - Choose "Cancel subscription", then "Turn off recurring billing" to keep access until it expires, and confirm.
+    notes: >-
+      You can also cancel on the console under Profile & system > Settings > Account >
+      Subscriptions.
+  pause:
+    availability: none
+verification:
+  status: unverified

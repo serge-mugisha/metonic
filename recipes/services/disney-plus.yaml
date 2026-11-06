@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: disney-plus
+name: Disney+
+category: streaming
+domains:
+  - disneyplus.com
+homepage: https://www.disneyplus.com
+thirdPartyBilling: [apple, google-play, amazon, roku, carrier, other]
+actions:
+  cancel:
+    level: info
+    url: https://www.disneyplus.com/account
+    instructions:
+      - Sign in to Disney+ in this browser and open Account.
+      - Select your Disney+ subscription.
+      - Choose "Cancel subscription", skip any offers, and confirm. Access continues to the end of the billing period.
+    notes: >-
+      If no cancel option appears, Disney+ is billed by someone else (an app store, a bundle,
+      or your internet or phone provider). Cancel there. Deleting your Disney account does
+      not cancel the subscription.
+  pause:
+    availability: none
+verification:
+  status: unverified

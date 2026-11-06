@@ -4,6 +4,7 @@ import {
   createExport,
   findRecipeForHost,
   type ImportResult,
+  isDetectionPath,
   mergeImport,
   type Subscription,
   toIsoDate,
@@ -22,6 +23,8 @@ export async function recordDetection(
 ): Promise<PendingDetection | undefined> {
   const host = new URL(page.url).hostname.replace(/^www\./, '');
   const recipe = findRecipeForHost(recipes, host);
+  // Big sites (Amazon) sell one-off things too; only their signup pages count.
+  if (recipe && !isDetectionPath(recipe, page.url)) return;
   const key = recipe?.id ?? host;
 
   const tracked = await subscriptions.getValue();

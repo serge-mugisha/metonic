@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: dropbox
+name: Dropbox
+category: cloud-storage
+domains:
+  - dropbox.com
+homepage: https://www.dropbox.com
+thirdPartyBilling: [apple, google-play]
+actions:
+  cancel:
+    level: info
+    url: https://www.dropbox.com/account/plan
+    instructions:
+      - Sign in to Dropbox in this browser and open the Plan tab of your account settings.
+      - Choose "Cancel plan" and follow the steps to confirm.
+    notes: Your files stay, but anything over the free Basic quota stops syncing once the plan ends.
+  pause:
+    availability: none
+verification:
+  status: unverified

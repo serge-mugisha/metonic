@@ -108,6 +108,21 @@ export const Recipe = z
     category: z.enum(CATEGORIES),
     /** Sites where this service's checkout and account pages live. Subdomains match too. */
     domains: z.array(hostname).min(1),
+    /**
+     * Shared account portals where this service is managed but not sold, such as
+     * account.microsoft.com for both Microsoft 365 and Xbox Game Pass. Action URLs may point
+     * here. Unlike `domains`, several recipes can list the same one, and they are never
+     * used to detect checkouts.
+     */
+    accountDomains: z.array(hostname).optional(),
+    /**
+     * Path prefixes where signups happen, e.g. ["/prime"] on amazon.com. When set, checkout
+     * detection only runs there, so a big site's other checkouts don't trigger prompts.
+     */
+    detectOn: z
+      .array(z.string().regex(/^\/[^*?#\s]*$/, 'a path prefix starting with "/" (no wildcards)'))
+      .min(1)
+      .optional(),
     homepage: z.url({ protocol: /^https$/ }),
     /** Other channels that can bill this service; users must cancel there instead. */
     thirdPartyBilling: z.array(z.enum(['apple', 'google-play', 'amazon', 'roku', 'carrier', 'other'])).optional(),
@@ -139,7 +154,8 @@ export const Recipe = z
       });
     }
 
-    // Every URL a recipe opens must stay on its own domains.
+    // Every URL a recipe opens must stay on its own domains or account portals.
+    const allowed = [...recipe.domains, ...(recipe.accountDomains ?? [])];
     const actions = recipe.actions;
     const named: [string, Action | undefined][] = [
       ['cancel', actions.cancel],
@@ -154,8 +170,12 @@ export const Recipe = z
         if (step.do === 'navigate') urls.push([`actions.${name}.steps.${i}.url`, step.url]);
       });
       for (const [where, url] of urls) {
-        if (!isOnDomains(url, recipe.domains)) {
-          ctx.addIssue({ code: 'custom', message: `${url} is not on this recipe's domains`, path: where.split('.') });
+        if (!isOnDomains(url, allowed)) {
+          ctx.addIssue({
+            code: 'custom',
+            message: `${url} is not on this recipe's domains or accountDomains`,
+            path: where.split('.'),
+          });
         }
       }
     }
@@ -171,6 +191,23 @@ function isOnDomains(url: string, domains: readonly string[]): boolean {
 export function recipeMatchPatterns(recipes: readonly Pick<Recipe, 'domains'>[]): string[] {
   const patterns = recipes.flatMap((r) => r.domains.flatMap((d) => [`https://${d}/*`, `https://*.${d}/*`]));
   return [...new Set(patterns)].sort();
+}
+
+/** Match patterns where the checkout detector should run: `detectOn` paths when set, else whole domains. */
+export function recipeDetectPatterns(recipes: readonly Pick<Recipe, 'domains' | 'detectOn'>[]): string[] {
+  const patterns = recipes.flatMap((r) =>
+    r.domains.flatMap((d) =>
+      (r.detectOn ?? ['/']).flatMap((path) => [`https://${d}${path}*`, `https://*.${d}${path}*`]),
+    ),
+  );
+  return [...new Set(patterns)].sort();
+}
+
+/** Whether checkout detection applies to `url` for this recipe (always true without `detectOn`). */
+export function isDetectionPath(recipe: Pick<Recipe, 'detectOn'>, url: string): boolean {
+  if (!recipe.detectOn) return true;
+  const { pathname } = new URL(url);
+  return recipe.detectOn.some((prefix) => pathname.startsWith(prefix));
 }
 
 /** Find the recipe whose domains include `host` (exact match or subdomain). */

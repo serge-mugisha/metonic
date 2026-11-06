@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { findRecipeForHost, Recipe } from './schema';
+import { findRecipeForHost, isDetectionPath, Recipe, recipeDetectPatterns } from './schema';
 
 const base = {
   schemaVersion: 0,
@@ -72,6 +72,30 @@ describe('Recipe schema', () => {
       },
     };
     expect(Recipe.safeParse(offsiteStep).success).toBe(false);
+  });
+
+  it('narrows detection to detectOn paths', () => {
+    expect(Recipe.safeParse({ ...base, detectOn: ['prime'] }).success).toBe(false);
+    expect(Recipe.safeParse({ ...base, detectOn: ['/prime*'] }).success).toBe(false);
+    const narrowed = Recipe.parse({ ...base, detectOn: ['/prime', '/gp/prime'] });
+    expect(recipeDetectPatterns([narrowed])).toEqual([
+      'https://*.example.com/gp/prime*',
+      'https://*.example.com/prime*',
+      'https://example.com/gp/prime*',
+      'https://example.com/prime*',
+    ]);
+    expect(recipeDetectPatterns([Recipe.parse(base)])).toEqual(['https://*.example.com/*', 'https://example.com/*']);
+    expect(isDetectionPath(narrowed, 'https://www.example.com/prime/signup')).toBe(true);
+    expect(isDetectionPath(narrowed, 'https://www.example.com/checkout')).toBe(false);
+    expect(isDetectionPath(Recipe.parse(base), 'https://www.example.com/checkout')).toBe(true);
+  });
+
+  it('allows action URLs on shared account portals', () => {
+    const portal = { ...base.actions.cancel, url: 'https://account.example-portal.com/services' };
+    expect(Recipe.safeParse({ ...base, actions: { cancel: portal } }).success).toBe(false);
+    expect(
+      Recipe.safeParse({ ...base, accountDomains: ['example-portal.com'], actions: { cancel: portal } }).success,
+    ).toBe(true);
   });
 
   it('requires lastVerified for verified recipes', () => {
