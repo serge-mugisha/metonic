@@ -2,7 +2,7 @@ import { ImportError, type ImportResult, toIsoDate } from '@metonic/core';
 import { useState } from 'react';
 import { exportSubscriptions, importSubscriptions } from '../../src/actions';
 import { type PromptStyle, settings } from '../../src/storage';
-import { UniversalDetectionToggle } from '../../src/ui/UniversalDetectionToggle';
+import { DetectionSettings } from '../../src/ui/DetectionAccess';
 import { useStorageItem } from '../../src/use-storage';
 
 export function App() {
@@ -13,7 +13,7 @@ export function App() {
       <section>
         <h2>Detection</h2>
         <PromptChoice />
-        <UniversalDetectionToggle />
+        <DetectionSettings />
       </section>
 
       <section>

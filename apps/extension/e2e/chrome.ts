@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { Browser, computeExecutablePath, detectBrowserPlatform, install, resolveBuildId } from '@puppeteer/browsers';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-export const EXTENSION_DIR = path.resolve(here, '..', '.output', 'chrome-mv3');
+export const EXTENSION_DIR = path.resolve(here, '..', '.output', 'chrome-mv3-e2e');
 const CACHE_DIR = path.resolve(here, '..', '.cache', 'chrome');
 
 /**

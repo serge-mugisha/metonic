@@ -10,8 +10,8 @@
    when no recipe exists. Deterministic recipes do the work when one exists.
 4. **No required fees.** Nothing in the default setup costs the project or the user
    money: no bank aggregators, no restricted Google scopes, no hosted backend.
-5. **Least privilege.** Host access only on known services by default; everything
-   broader is an explicit opt-in.
+5. **Least privilege.** No host access at install. The user grants the known services
+   (one click on the welcome page) and, separately, every site if they want.
 
 ## Layout
 
@@ -38,8 +38,8 @@ separate entry so the content script doesn't pull in Zod.
 ### Detection flow
 
 1. The content script is **registered at runtime** (`scripting.registerContentScripts`)
-   on recipe domains. If the user grants `<all_urls>` (optional permission), it's
-   re-registered for every site.
+   only on origins the user has granted: the known services, or every site if they
+   granted `<all_urls>`. It's re-registered whenever permissions change.
 2. `detectCheckout()` scores signals: card field (including Stripe/Braintree iframes),
    checkout-like URL, recurring price, trial wording, subscription vocabulary, and
    commit buttons like "Start membership". It flags a page only above a threshold
@@ -65,7 +65,16 @@ Declarative YAML validated by Zod (`packages/core/src/recipe/schema.ts`), descri
 them at build time and inlines them as `__METONIC_RECIPES__`. The extension never
 fetches recipes remotely. Chrome Web Store policy bans interpreting remotely fetched
 commands even when they are data (see [research.md](research.md#chrome-web-store-policy-recipes-must-ship-in-the-package)).
-Host permissions are generated from recipe domains.
+
+**All site access is optional.** The manifest has no `host_permissions`, only
+`optional_host_permissions: ['<all_urls>']`. Recipe domains become match patterns that
+are requested at runtime (`src/permissions.ts`). This matters because Chrome disables
+an extension on update when new host permissions change its warning, so if recipe
+domains were required permissions, every release that adds a recipe would switch
+Metonic off for everyone. With optional access, a release that adds services just
+makes the popup say "Detection is off for N newly supported services · Turn on".
+The e2e build (`--mode e2e`) pre-grants the recipe hosts because tests can't click
+Chrome's permission dialog.
 
 Safety rules enforced by the schema:
 - `https` URLs only; strict keys (typos fail validation).

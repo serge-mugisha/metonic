@@ -9,7 +9,8 @@
     "build": "wxt build",
     "zip": "wxt zip",
     "typecheck": "wxt prepare && tsc --noEmit",
-    "postinstall": "wxt prepare"
+    "postinstall": "wxt prepare",
+    "build:e2e": "wxt build --mode e2e"
   },
   "dependencies": {
     "@metonic/core": "*",

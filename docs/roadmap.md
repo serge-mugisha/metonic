@@ -9,7 +9,7 @@ is a summary; issues are the source of truth.
 Done in the initial scaffold:
 - Subscription model, monthly totals, billing anchors
 - Recipe schema v0, validator, JSON Schema for editors
-- Heuristic checkout detection (known services by default, all sites opt-in)
+- Heuristic checkout detection (known services after one-click opt-in, all sites optional)
 - Notification prompt: "Subscribing to X? Track it"
 - Popup: totals, detected, tracked, manual add, "Track this page"
 - Trial-ending and renewal reminders
