@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { CATEGORIES } from '../subscription';
 
 /**
  * Recipe format v0. See docs/recipe-spec.md for the human-readable spec.
@@ -104,20 +105,7 @@ export const Recipe = z
     schemaVersion: z.literal(RECIPE_SCHEMA_VERSION),
     id: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, 'kebab-case id'),
     name: z.string().min(1),
-    category: z.enum([
-      'streaming',
-      'music',
-      'gaming',
-      'news',
-      'software',
-      'cloud-storage',
-      'ai',
-      'fitness',
-      'food',
-      'shopping',
-      'education',
-      'other',
-    ]),
+    category: z.enum(CATEGORIES),
     /** Sites where this service's checkout and account pages live. Subdomains match too. */
     domains: z.array(hostname).min(1),
     homepage: z.url({ protocol: /^https$/ }),
