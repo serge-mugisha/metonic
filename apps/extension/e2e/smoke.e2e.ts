@@ -82,6 +82,57 @@ describe('extension smoke test', () => {
     await popup.close();
   });
 
+  it('shows an in-page prompt that tracks the subscription', async () => {
+    const page = await h.openFakeSite(CHECKOUT_URL, CHECKOUT_HTML);
+    const title = await page.waitForSelector('metonic-prompt >>> .title', { timeout: 10_000 });
+    expect(await title?.evaluate((el) => el.textContent)).toBe('Subscribing to Netflix?');
+    expect(await page.$eval('metonic-prompt >>> .details', (el) => el.textContent)).toMatch(/\$17\.99\/month$/); // "$" or "US$" depending on browser locale
+
+    // Synthetic clicks from page scripts must be ignored.
+    await page.evaluate(() =>
+      (
+        document.querySelector('metonic-prompt')?.shadowRoot?.querySelector('button:not(.close)') as HTMLElement
+      )?.click(),
+    );
+    await new Promise((r) => setTimeout(r, 500));
+    expect((await h.storage<{ subscriptions?: Subscription[] }>()).subscriptions ?? []).toEqual([]);
+
+    await page.click('metonic-prompt >>> button:not(.close):not(.secondary)');
+    await page.waitForFunction(
+      () =>
+        document.querySelector('metonic-prompt')?.shadowRoot?.querySelector('.title')?.textContent ===
+        'Tracking Netflix',
+    );
+    const subs = (await h.storage<{ subscriptions?: Subscription[] }>()).subscriptions ?? [];
+    expect(subs.map((s) => s.serviceId)).toEqual(['netflix']);
+    expect(await pending()).toEqual([]);
+    await page.close();
+  });
+
+  it('does not ask again after "Not now"', async () => {
+    const first = await h.openFakeSite(CHECKOUT_URL, CHECKOUT_HTML);
+    await first.waitForSelector('metonic-prompt >>> button.secondary', { timeout: 10_000 });
+    await first.click('metonic-prompt >>> button.secondary');
+    await waitFor(async () => (await h.storage<{ dismissedDetections?: object }>()).dismissedDetections);
+    expect(await first.$('metonic-prompt')).toBeNull();
+    await first.close();
+
+    const again = await h.openFakeSite(CHECKOUT_URL, CHECKOUT_HTML);
+    await new Promise((r) => setTimeout(r, 2500));
+    expect(await again.$('metonic-prompt')).toBeNull();
+    expect(await pending()).toEqual([]);
+    await again.close();
+  });
+
+  it('skips the page prompt when the user prefers notifications', async () => {
+    await h.worker.evaluate(() => chrome.storage.local.set({ settings: { prompt: 'notification' } }));
+    const page = await h.openFakeSite(CHECKOUT_URL, CHECKOUT_HTML);
+    await waitFor(async () => ((await pending()).length > 0 ? true : undefined));
+    await new Promise((r) => setTimeout(r, 500));
+    expect(await page.$('metonic-prompt')).toBeNull();
+    await page.close();
+  });
+
   it('ignores a pricing page on the same site', async () => {
     const page = await h.openFakeSite('https://www.netflix.com/plans', PRICING_HTML);
     // Give the detector (and its 1.5s mutation debounce) time to run before asserting nothing happened.

@@ -1,6 +1,6 @@
 import { daysUntil, formatMoney, formatRecurring, nextChargeOn, recipeMatchPatterns, toIsoDate } from '@metonic/core';
 import { dismissDetection, recordDetection, trackDetection } from '../src/actions';
-import type { Message } from '../src/messages';
+import type { DetectedReply, Message } from '../src/messages';
 import { recipes } from '../src/recipes';
 import { pendingDetections, sentReminders, settings, subscriptions } from '../src/storage';
 
@@ -15,8 +15,16 @@ export default defineBackground(() => {
   browser.permissions.onAdded.addListener(() => void registerDetector());
   browser.permissions.onRemoved.addListener(() => void registerDetector());
 
-  browser.runtime.onMessage.addListener((message: Message) => {
-    if (message.type === 'checkout-detected') void onCheckoutDetected(message);
+  browser.runtime.onMessage.addListener((message: Message, _sender, sendResponse) => {
+    if (message.type === 'checkout-detected') {
+      void onCheckoutDetected(message).then(sendResponse);
+      return true; // keep the channel open for the async reply
+    }
+    if (message.type === 'decide-detection') {
+      void decide(message.key, message.track).then(() => sendResponse());
+      return true;
+    }
+    return undefined;
   });
 
   browser.notifications.onButtonClicked.addListener((id, buttonIndex) => void onNotificationButton(id, buttonIndex));
@@ -49,9 +57,9 @@ async function registerDetector() {
   else await browser.scripting.registerContentScripts([script]);
 }
 
-async function onCheckoutDetected(message: Message) {
+async function onCheckoutDetected(message: Extract<Message, { type: 'checkout-detected' }>): Promise<DetectedReply> {
   const entry = await recordDetection(message.page, message.detection);
-  if (!entry) return;
+  if (!entry) return {};
 
   const price = entry.detection.recurring;
   const trial = entry.detection.trial;
@@ -62,22 +70,30 @@ async function onCheckoutDetected(message: Message) {
     .filter(Boolean)
     .join(' · ');
 
-  await browser.notifications.create(`detect:${entry.key}`, {
-    type: 'basic',
-    iconUrl: browser.runtime.getURL('/icon/128.png'),
-    title: `Subscribing to ${entry.name}?`,
-    message: details ? `${details}. Track it in Metonic?` : 'Track it in Metonic?',
-    buttons: [{ title: 'Track it' }, { title: 'Not now' }],
-    requireInteraction: true,
-  });
+  const { prompt } = await settings.getValue();
+  if (prompt !== 'page') {
+    await browser.notifications.create(`detect:${entry.key}`, {
+      type: 'basic',
+      iconUrl: browser.runtime.getURL('/icon/128.png'),
+      title: `Subscribing to ${entry.name}?`,
+      message: details ? `${details}. Track it in Metonic?` : 'Track it in Metonic?',
+      buttons: [{ title: 'Track it' }, { title: 'Not now' }],
+      requireInteraction: true,
+    });
+  }
+  return prompt === 'notification' ? {} : { prompt: { key: entry.key, name: entry.name, details } };
+}
+
+/** Track or dismiss a detection, from the page prompt or the notification. */
+async function decide(key: string, track: boolean) {
+  if (track) await trackDetection(key);
+  else await dismissDetection(key);
+  await browser.notifications.clear(`detect:${key}`);
 }
 
 async function onNotificationButton(notificationId: string, buttonIndex: number) {
   if (!notificationId.startsWith('detect:')) return;
-  const key = notificationId.slice('detect:'.length);
-  if (buttonIndex === 0) await trackDetection(key);
-  else await dismissDetection(key);
-  await browser.notifications.clear(notificationId);
+  await decide(notificationId.slice('detect:'.length), buttonIndex === 0);
 }
 
 async function sendReminders() {

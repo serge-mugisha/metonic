@@ -13,10 +13,16 @@ export interface PendingDetection {
   detectedAt: string;
 }
 
+/** How to ask about a detected checkout. */
+export type PromptStyle = 'page' | 'notification' | 'both';
+
 export interface Settings {
   /** Days before a trial ends or a renewal to send a reminder. */
   reminderDays: number;
+  prompt: PromptStyle;
 }
+
+export const DEFAULT_SETTINGS: Settings = { reminderDays: 3, prompt: 'page' };
 
 export const subscriptions = storage.defineItem<Subscription[]>('local:subscriptions', { fallback: [] });
 
@@ -32,4 +38,17 @@ export const dismissedDetections = storage.defineItem<Record<string, string>>('l
 /** `${subscriptionId}:${date}` keys we already sent a reminder for. */
 export const sentReminders = storage.defineItem<Record<string, true>>('local:sentReminders', { fallback: {} });
 
-export const settings = storage.defineItem<Settings>('local:settings', { fallback: { reminderDays: 3 } });
+// Stored partially so settings added in later versions pick up their defaults.
+const storedSettings = storage.defineItem<Partial<Settings>>('local:settings', { fallback: {} });
+
+export const settings = {
+  async getValue(): Promise<Settings> {
+    return { ...DEFAULT_SETTINGS, ...(await storedSettings.getValue()) };
+  },
+  async update(patch: Partial<Settings>): Promise<void> {
+    await storedSettings.setValue({ ...(await storedSettings.getValue()), ...patch });
+  },
+  watch(cb: (value: Settings) => void): () => void {
+    return storedSettings.watch((value) => cb({ ...DEFAULT_SETTINGS, ...value }));
+  },
+};
