@@ -122,3 +122,18 @@ export function daysUntil(on: string, from: Date = new Date()): number {
   const start = new Date(from.getFullYear(), from.getMonth(), from.getDate()).getTime();
   return Math.round((target - start) / 86_400_000);
 }
+
+/**
+ * Parse a price typed by a person into minor units: "12.99", "12,99", "1,234.50", "1.234,50".
+ * The last separator is the decimal point only if 1-2 digits follow it. Returns undefined if unreadable.
+ */
+export function parseAmountInput(text: string): number | undefined {
+  const cleaned = text.replace(/[\s '’]/g, '').replace(/^[^\d.,]+|[^\d.,]+$/g, '');
+  if (!/^[\d.,]*\d[\d.,]*$/.test(cleaned)) return undefined;
+  const last = Math.max(cleaned.lastIndexOf('.'), cleaned.lastIndexOf(','));
+  const decimals = last === -1 ? '' : cleaned.slice(last + 1);
+  const isDecimal = last !== -1 && decimals.length >= 1 && decimals.length <= 2;
+  const whole = (isDecimal ? cleaned.slice(0, last) : cleaned).replace(/[.,]/g, '');
+  const minor = Number(whole || '0') * 100 + (isDecimal ? Number(decimals.padEnd(2, '0')) : 0);
+  return Number.isSafeInteger(minor) ? minor : undefined;
+}
