@@ -18,9 +18,11 @@
   },
   "devDependencies": {
     "@metonic/recipes": "*",
+    "@puppeteer/browsers": "^3.2.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@wxt-dev/module-react": "^1.2.2",
+    "puppeteer-core": "^25.16.0",
     "wxt": "^0.21.5"
   }
 }
