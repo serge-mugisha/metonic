@@ -1,0 +1,19 @@
+{
+  "description": "French page: \"€/mois\"",
+  "source": "synthetic, modeled on a music streaming checkout, French locale (2026)",
+  "url": "https://www.deezer-like.example/fr/offers/checkout",
+  "title": "Paiement",
+  "lang": "fr",
+  "hasCardField": true,
+  "text": "Premium\n11,99 €/mois, sans engagement\nNuméro de carte Date d'expiration Cryptogramme\nVotre abonnement est renouvelé automatiquement chaque mois.\nS'abonner",
+  "expected": {
+    "isLikelyCheckout": true,
+    "recurring": {
+      "price": {
+        "amountMinor": 1199,
+        "currency": "EUR"
+      },
+      "cycle": "monthly"
+    }
+  }
+}

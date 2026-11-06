@@ -1,0 +1,13 @@
+{
+  "description": "Donation form with one-time/monthly toggle",
+  "source": "synthetic, modeled on a non-profit donation form (2026)",
+  "url": "https://donate.example.org/",
+  "title": "Make a donation",
+  "lang": "en",
+  "hasCardField": true,
+  "text": "Please support us. Select an amount: $5 $15 $25 $50 Other\nFrequency: One-time  Monthly\nCard number Expiration CVC\nDonate $25",
+  "expected": {
+    "isLikelyCheckout": false,
+    "recurring": null
+  }
+}

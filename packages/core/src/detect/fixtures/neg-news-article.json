@@ -1,0 +1,12 @@
+{
+  "description": "News article about a price increase",
+  "source": "synthetic, modeled on a tech news article (2026)",
+  "url": "https://news.example.com/2026/10/streaming-price-hike",
+  "title": "Streaming giant raises prices again",
+  "lang": "en-US",
+  "hasCardField": false,
+  "text": "The Standard plan now costs $17.99/month, up from $15.49, while Premium rises to $24.99/month. Existing subscribers will see the change at their next renewal. Subscribe to our newsletter for more.",
+  "expected": {
+    "isLikelyCheckout": false
+  }
+}

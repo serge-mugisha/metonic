@@ -1,0 +1,12 @@
+{
+  "description": "Plans comparison page: many recurring prices, no payment step",
+  "source": "synthetic, modeled on a music streaming plans page (2026)",
+  "url": "https://www.music.example/us/premium/",
+  "title": "Premium Plans",
+  "lang": "en-US",
+  "hasCardField": false,
+  "text": "Listen without limits. Try 1 month of Premium for $0.\nIndividual $11.99/month after. Duo $16.99/month after. Family $19.99/month after. Student $5.99/month after.\nCancel anytime. Subscription automatically renews.\nGet Premium Individual  Get Premium Duo  Get Premium Family",
+  "expected": {
+    "isLikelyCheckout": false
+  }
+}

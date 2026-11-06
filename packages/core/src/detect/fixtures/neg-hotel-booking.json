@@ -1,0 +1,13 @@
+{
+  "description": "Hotel booking: \"per night\" is not a subscription",
+  "source": "synthetic, modeled on a hotel booking payment step (2026)",
+  "url": "https://www.hotels.example/book/payment",
+  "title": "Secure booking",
+  "lang": "en-US",
+  "hasCardField": true,
+  "text": "Deluxe King Room. $189 per night, 3 nights. Taxes and fees $68.40. Total $635.40\nFree cancellation before Dec 1.\nCard number Name on card\nComplete booking",
+  "expected": {
+    "isLikelyCheckout": false,
+    "recurring": null
+  }
+}

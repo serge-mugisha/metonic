@@ -6,6 +6,7 @@ import {
   monthlyTotals,
   nextChargeOn,
   type Subscription,
+  toDecimalString,
   toIsoDate,
 } from '@metonic/core';
 import { detectCheckout } from '@metonic/core/detect';
@@ -172,7 +173,7 @@ async function trackThisPage(): Promise<Draft> {
 
   const { recurring, trial } = detectCheckout(snapshot);
   if (recurring) {
-    draft.amount = (recurring.price.amountMinor / 100).toFixed(2);
+    draft.amount = toDecimalString(recurring.price);
     draft.currency = recurring.price.currency;
     draft.cycle = recurring.cycle;
   }

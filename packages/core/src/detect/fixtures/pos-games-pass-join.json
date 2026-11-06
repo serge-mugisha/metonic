@@ -1,0 +1,19 @@
+{
+  "description": "Game subscription join page without a card field but with a \"Join now\" CTA",
+  "source": "synthetic, modeled on a console game subscription purchase dialog (2026)",
+  "url": "https://www.games.example/en-US/game-pass/ultimate/join",
+  "title": "Join Ultimate",
+  "lang": "en-US",
+  "hasCardField": false,
+  "text": "Ultimate\n$19.99/month\nRecurring billing. Cancel anytime. Continue to be charged unless you cancel.\nPay with: Visa **42\nJoin now",
+  "expected": {
+    "isLikelyCheckout": true,
+    "recurring": {
+      "price": {
+        "amountMinor": 1999,
+        "currency": "USD"
+      },
+      "cycle": "monthly"
+    }
+  }
+}

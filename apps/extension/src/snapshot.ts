@@ -24,5 +24,6 @@ export function takeSnapshot(): PageSnapshot {
     title: document.title,
     text: (document.body?.innerText ?? '').slice(0, 20_000),
     hasCardField: cardField !== null,
+    lang: document.documentElement.lang,
   };
 }

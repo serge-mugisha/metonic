@@ -1,0 +1,19 @@
+{
+  "description": "German page: suffix euro, comma decimals, \"pro Monat\"",
+  "source": "synthetic, modeled on a music streaming checkout, German locale (2026)",
+  "url": "https://www.music.example/de/purchase/premium",
+  "title": "Premium kaufen",
+  "lang": "de",
+  "hasCardField": true,
+  "text": "Premium Individual\n1 Monat für 0 €\nDanach 10,99 € pro Monat. Jederzeit kündbar.\nKreditkarte oder Debitkarte Kartennummer Ablaufdatum Sicherheitscode\nPremium holen",
+  "expected": {
+    "isLikelyCheckout": true,
+    "recurring": {
+      "price": {
+        "amountMinor": 1099,
+        "currency": "EUR"
+      },
+      "cycle": "monthly"
+    }
+  }
+}

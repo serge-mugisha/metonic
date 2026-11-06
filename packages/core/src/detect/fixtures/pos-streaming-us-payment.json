@@ -1,0 +1,20 @@
+{
+  "description": "Streaming service payment step, US, card form and start button",
+  "source": "synthetic, modeled on a streaming service signup payment step (2026)",
+  "url": "https://www.streaming.example/signup/creditoption",
+  "title": "Set up your credit or debit card",
+  "lang": "en-US",
+  "hasCardField": true,
+  "text": "STEP 3 OF 3\nSet up your credit or debit card\nFirst name Last name Card number Expiration date CVV\nStandard $17.99/month Change\nYour payments will be processed internationally. Additional bank fees may apply.\nBy checking the checkbox below, you agree to our Terms of Use, Privacy Statement, and that you are over 18. We will automatically continue your membership and charge the membership fee (currently $17.99/month) to your payment method until you cancel. You may cancel at any time to avoid future charges.\nI agree.\nStart Membership",
+  "expected": {
+    "isLikelyCheckout": true,
+    "recurring": {
+      "price": {
+        "amountMinor": 1799,
+        "currency": "USD"
+      },
+      "cycle": "monthly"
+    },
+    "trial": null
+  }
+}

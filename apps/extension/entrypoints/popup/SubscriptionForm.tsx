@@ -4,6 +4,7 @@ import {
   parseAmountInput,
   type Subscription,
   type SubscriptionStatus,
+  toDecimalString,
   toIsoDate,
 } from '@metonic/core';
 import { useState } from 'react';
@@ -43,7 +44,7 @@ export function draftFrom(sub: Subscription): Draft {
   return {
     name: sub.name,
     ...(sub.serviceId && { serviceId: sub.serviceId }),
-    amount: sub.price.amountMinor > 0 ? (sub.price.amountMinor / 100).toFixed(2) : '',
+    amount: sub.price.amountMinor > 0 ? toDecimalString(sub.price) : '',
     currency: sub.price.currency,
     cycle: sub.cycle,
     status: sub.status,
@@ -64,7 +65,10 @@ function toFields(draft: Draft, existing?: Subscription): SubscriptionFields {
   return {
     name: draft.name.trim(),
     ...(draft.serviceId && { serviceId: draft.serviceId }),
-    price: { amountMinor: parseAmountInput(draft.amount) ?? 0, currency: draft.currency.trim().toUpperCase() },
+    price: {
+      amountMinor: parseAmountInput(draft.amount, normalizeCurrency(draft.currency)) ?? 0,
+      currency: normalizeCurrency(draft.currency),
+    },
     cycle: draft.cycle,
     status,
     ...(existing?.startedOn && { startedOn: existing.startedOn }),
@@ -96,7 +100,8 @@ export function SubscriptionForm({
 }) {
   const [draft, setDraft] = useState(initial);
   const set = <K extends keyof Draft>(key: K, value: Draft[K]) => setDraft((d) => ({ ...d, [key]: value }));
-  const priceInvalid = draft.amount.trim() !== '' && parseAmountInput(draft.amount) === undefined;
+  const priceInvalid =
+    draft.amount.trim() !== '' && parseAmountInput(draft.amount, normalizeCurrency(draft.currency)) === undefined;
 
   const save = async () => {
     const fields = toFields(draft, editing);
@@ -193,4 +198,8 @@ export function SubscriptionForm({
       </div>
     </form>
   );
+}
+
+function normalizeCurrency(input: string): string {
+  return input.trim().toUpperCase();
 }

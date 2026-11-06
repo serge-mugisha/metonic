@@ -1,0 +1,22 @@
+{
+  "description": "Yearly price with a 14-day trial and no card field (app store style CTA)",
+  "source": "synthetic, modeled on a language learning app upgrade page (2026)",
+  "url": "https://www.lingo.example/upgrade",
+  "title": "Try Super for free",
+  "lang": "en",
+  "hasCardField": false,
+  "text": "Try 14 days for free\nHow your free trial works\nToday: Get instant access. Day 12: We'll remind you that your trial is ending. Day 14: You'll be charged on December 20. Cancel anytime before.\n14-day free trial, then $84.99/year\nStart my free trial",
+  "expected": {
+    "isLikelyCheckout": true,
+    "recurring": {
+      "price": {
+        "amountMinor": 8499,
+        "currency": "USD"
+      },
+      "cycle": "yearly"
+    },
+    "trial": {
+      "days": 14
+    }
+  }
+}

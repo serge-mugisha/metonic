@@ -1,0 +1,19 @@
+{
+  "description": "Annual plan paid monthly, \"/mo\" abbreviation",
+  "source": "synthetic, modeled on a creative software suite checkout (2026)",
+  "url": "https://commerce.creative.example/store/checkout",
+  "title": "Checkout | Creative Suite",
+  "lang": "en-US",
+  "hasCardField": true,
+  "text": "Creative Suite All Apps\nAnnual, billed monthly\nUS$59.99/mo\nFee applies if you cancel after 14 days.\nPayment Credit/debit card PayPal\nCard number Expiration date\nYour subscription renews automatically. Agree and subscribe",
+  "expected": {
+    "isLikelyCheckout": true,
+    "recurring": {
+      "price": {
+        "amountMinor": 5999,
+        "currency": "USD"
+      },
+      "cycle": "monthly"
+    }
+  }
+}

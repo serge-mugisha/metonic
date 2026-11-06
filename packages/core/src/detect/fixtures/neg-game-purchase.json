@@ -1,0 +1,13 @@
+{
+  "description": "One-off digital game purchase",
+  "source": "synthetic, modeled on a PC game store checkout (2026)",
+  "url": "https://store.games.example/checkout/?purchasetype=self",
+  "title": "Purchase",
+  "lang": "en",
+  "hasCardField": true,
+  "text": "Your purchase\nSpace Strategy Deluxe Edition $59.99\nSubtotal $59.99\nPayment method: Visa Card number Expiration date Security code\nI agree to the terms of the Subscriber Agreement.\nPurchase",
+  "expected": {
+    "isLikelyCheckout": false,
+    "recurring": null
+  }
+}

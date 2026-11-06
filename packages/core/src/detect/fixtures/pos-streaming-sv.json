@@ -1,0 +1,19 @@
+{
+  "description": "Swedish page: \"kr/mån\" resolves to SEK",
+  "source": "synthetic, modeled on a Nordic streaming checkout, Swedish locale (2026)",
+  "url": "https://viaplay-like.example/se-sv/checkout",
+  "title": "Betalning",
+  "lang": "sv",
+  "hasCardField": true,
+  "text": "Film & Serier\n149 kr/mån\nIngen bindningstid. Abonnemanget förnyas automatiskt.\nKortnummer Giltigt till CVC\nBekräfta och betala",
+  "expected": {
+    "isLikelyCheckout": true,
+    "recurring": {
+      "price": {
+        "amountMinor": 14900,
+        "currency": "SEK"
+      },
+      "cycle": "monthly"
+    }
+  }
+}
