@@ -28,6 +28,8 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - name: Browser smoke test (Chrome for Testing)
+        run: npm run e2e
       - uses: actions/upload-artifact@v7
         with:
           name: metonic-chrome-mv3
