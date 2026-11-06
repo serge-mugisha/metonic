@@ -1,7 +1,7 @@
 import { ImportError, type ImportResult, toIsoDate } from '@metonic/core';
 import { useState } from 'react';
 import { exportSubscriptions, importSubscriptions } from '../../src/actions';
-import { settings } from '../../src/storage';
+import { type PromptStyle, settings } from '../../src/storage';
 import { UniversalDetectionToggle } from '../../src/ui/UniversalDetectionToggle';
 import { useStorageItem } from '../../src/use-storage';
 
@@ -12,6 +12,7 @@ export function App() {
 
       <section>
         <h2>Detection</h2>
+        <PromptChoice />
         <UniversalDetectionToggle />
       </section>
 
@@ -45,11 +46,39 @@ function ReminderDays() {
         value={current.reminderDays}
         onChange={(e) => {
           const days = Math.min(30, Math.max(0, Math.round(e.target.valueAsNumber)));
-          if (Number.isFinite(days)) void settings.setValue({ ...current, reminderDays: days });
+          if (Number.isFinite(days)) void settings.update({ reminderDays: days });
         }}
       />{' '}
       days before a free trial ends or a subscription renews.
     </label>
+  );
+}
+
+const PROMPT_LABELS: Record<PromptStyle, string> = {
+  page: 'A small card on the page',
+  notification: 'A system notification',
+  both: 'Both',
+};
+
+function PromptChoice() {
+  const current = useStorageItem(settings);
+  if (!current) return null;
+  return (
+    <fieldset className="choice">
+      <legend>When Metonic spots a subscription checkout, ask with</legend>
+      {(Object.keys(PROMPT_LABELS) as PromptStyle[]).map((style) => (
+        <label key={style}>
+          <input
+            type="radio"
+            name="prompt"
+            value={style}
+            checked={current.prompt === style}
+            onChange={() => void settings.update({ prompt: style })}
+          />
+          {PROMPT_LABELS[style]}
+        </label>
+      ))}
+    </fieldset>
   );
 }
 

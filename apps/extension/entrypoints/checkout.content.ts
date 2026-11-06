@@ -1,5 +1,6 @@
 import { detectCheckout } from '@metonic/core/detect';
-import type { Message } from '../src/messages';
+import type { DetectedReply, Message } from '../src/messages';
+import { showPrompt } from '../src/prompt';
 import { takeSnapshot } from '../src/snapshot';
 
 /**
@@ -10,8 +11,11 @@ export default defineContentScript({
   registration: 'runtime',
   main(ctx) {
     let lastReported = '';
+    let closePrompt: (() => void) | undefined;
 
-    const check = () => {
+    const send = (message: Message) => browser.runtime.sendMessage(message);
+
+    const check = async () => {
       const detection = detectCheckout(takeSnapshot());
       if (!detection.isLikelyCheckout) return;
 
@@ -19,27 +23,37 @@ export default defineContentScript({
       if (key === lastReported) return;
       lastReported = key;
 
-      const message: Message = {
+      const reply: DetectedReply | undefined = await send({
         type: 'checkout-detected',
         page: { url: location.href, title: document.title },
         detection,
-      };
-      void browser.runtime.sendMessage(message);
+      });
+      const prompt = reply?.prompt;
+      if (!prompt || ctx.isInvalid) return;
+
+      closePrompt?.();
+      closePrompt = showPrompt({
+        name: prompt.name,
+        details: prompt.details,
+        onTrack: () => send({ type: 'decide-detection', key: prompt.key, track: true }),
+        onDismiss: () => send({ type: 'decide-detection', key: prompt.key, track: false }),
+      });
     };
 
-    check();
+    void check();
 
     // Single-page checkouts render each step without a navigation.
     let timer: ReturnType<typeof setTimeout> | undefined;
     const observer = new MutationObserver(() => {
       clearTimeout(timer);
-      timer = setTimeout(check, 1500);
+      timer = setTimeout(() => void check(), 1500);
     });
     observer.observe(document.body, { childList: true, subtree: true });
 
     ctx.onInvalidated(() => {
       observer.disconnect();
       clearTimeout(timer);
+      closePrompt?.();
     });
   },
 });
