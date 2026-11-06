@@ -1,0 +1,40 @@
+name: Release
+
+# Push a tag like v0.1.0 to build, test, and publish a GitHub Release with the
+# extension zip attached. The tag sets the extension version.
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Set extension version from tag
+        run: npm version "${GITHUB_REF_NAME#v}" --no-git-tag-version -w apps/extension
+      - run: npm run recipes:validate
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - name: Browser smoke test
+        run: npm run e2e
+      - run: npm run zip
+      - name: Check the store build has no required host permissions
+        run: test "$(node -p "(require('./apps/extension/.output/chrome-mv3/manifest.json').host_permissions || []).length")" = 0
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" apps/extension/.output/metonic-*-chrome.zip \
+            --title "Metonic $GITHUB_REF_NAME" --generate-notes \
+            $([[ "$GITHUB_REF_NAME" == *-* ]] && echo --prerelease)

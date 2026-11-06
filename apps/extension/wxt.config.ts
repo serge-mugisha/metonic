@@ -22,6 +22,9 @@ export default defineConfig({
     ...(mode === 'e2e' && { host_permissions: recipeMatchPatterns(recipes) }),
     action: { default_title: 'Metonic' },
   }),
+  zip: {
+    artifactTemplate: 'metonic-{{packageVersion}}-{{browser}}.zip',
+  },
   vite: () => ({
     define: {
       __METONIC_RECIPES__: JSON.stringify(recipes),
