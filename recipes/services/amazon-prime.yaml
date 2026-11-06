@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: amazon-prime
+name: Amazon Prime
+category: shopping
+domains:
+  - amazon.com
+# Amazon is mostly one-off shopping, and its checkouts advertise Prime trials. Only Prime
+# signup pages should trigger the "Subscribing to Amazon Prime?" prompt.
+detectOn:
+  - /prime
+  - /amazonprime
+  - /gp/prime
+homepage: https://www.amazon.com/prime
+thirdPartyBilling: [apple, google-play, carrier, other]
+actions:
+  cancel:
+    level: info
+    url: https://www.amazon.com/mc
+    instructions:
+      - Sign in to Amazon in this browser. This opens Prime membership management.
+      - Choose "Manage membership", then "End membership" (or "Cancel trial").
+      - Click through the retention pages ("Continue to cancel") until you can pick when it ends.
+      - Pick "End on (date)" to keep benefits until the period ends, or "End now" for a partial refund if eligible.
+    notes: >-
+      Prime Video is included with Prime. A standalone Prime Video subscription or add-on
+      channels are managed separately under Your Memberships & Subscriptions.
+  pause:
+    availability: none
+verification:
+  status: unverified
+  regions: [US]

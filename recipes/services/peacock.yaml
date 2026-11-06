@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: peacock
+name: Peacock
+category: streaming
+domains:
+  - peacocktv.com
+homepage: https://www.peacocktv.com
+thirdPartyBilling: [apple, google-play, amazon, roku, carrier, other]
+actions:
+  cancel:
+    level: info
+    url: https://www.peacocktv.com/account
+    instructions:
+      - Sign in to Peacock in this browser and open Account.
+      - Open "Plans & Payment" and choose "Change plan".
+      - Choose "Cancel plan" and confirm. Your plan stays active until the end of the billing period.
+  pause:
+    availability: none
+verification:
+  status: unverified
+  regions: [US]

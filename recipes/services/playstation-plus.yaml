@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: playstation-plus
+name: PlayStation Plus
+category: gaming
+domains:
+  - playstation.com
+accountDomains:
+  - sonyentertainmentnetwork.com
+homepage: https://www.playstation.com/ps-plus/
+actions:
+  cancel:
+    level: info
+    url: https://id.sonyentertainmentnetwork.com/id/management/
+    instructions:
+      - Sign in to your PlayStation account management page in this browser.
+      - Open "Subscriptions" (or "Subscription Management").
+      - Next to PlayStation Plus, choose "Turn Off Auto-Renew" and confirm. Membership lasts until the end of the period.
+    notes: >-
+      Redeeming a PlayStation Plus card or code can switch auto-renew back on. On a PS5 the
+      setting is under Settings > Users and Accounts > Payment and Subscriptions.
+  pause:
+    availability: none
+verification:
+  status: unverified

@@ -152,6 +152,25 @@ describe('extension smoke test', () => {
     await page.close();
   });
 
+  it('only detects on signup pages for recipes with detectOn (Amazon Prime)', async () => {
+    const upsell = `<!doctype html><html lang="en-US"><head><title>Place Your Order - Checkout</title></head><body>
+<p>USB-C cable $12.99. Order total: $14.06</p>
+<p>Try Prime FREE for 30 days. After your trial, Prime is $14.99/month. Cancel anytime.</p>
+<input autocomplete="cc-number"><button>Place your order</button></body></html>`;
+    const checkout = await h.openFakeSite('https://www.amazon.com/gp/buy/spc/checkout', upsell);
+    await new Promise((r) => setTimeout(r, 2500));
+    await checkout.close();
+    expect(await pending()).toEqual([]);
+
+    const signup = await h.openFakeSite('https://www.amazon.com/amazonprime', upsell);
+    const [entry] = await waitFor(async () => {
+      const list = await pending();
+      return list.length > 0 ? list : undefined;
+    });
+    await signup.close();
+    expect(entry?.key).toBe('amazon-prime');
+  });
+
   it('ignores a pricing page on the same site', async () => {
     const page = await h.openFakeSite('https://www.netflix.com/plans', PRICING_HTML);
     // Give the detector (and its 1.5s mutation debounce) time to run before asserting nothing happened.

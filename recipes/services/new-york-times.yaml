@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: new-york-times
+name: The New York Times
+category: news
+domains:
+  - nytimes.com
+homepage: https://www.nytimes.com
+thirdPartyBilling: [apple, google-play, other]
+actions:
+  cancel:
+    level: info
+    url: https://myaccount.nytimes.com/seg/subscription
+    instructions:
+      - Sign in to The New York Times in this browser. This opens your subscription overview.
+      - Choose "Cancel subscription" and continue past any discount offers.
+      - Confirm. Access continues to the end of the billing period.
+    notes: >-
+      In some regions the cancel option opens a chat with customer care instead. Introductory
+      rates renew at the full price, so this is a good one to set a reminder for.
+  pause:
+    availability: unknown
+verification:
+  status: unverified

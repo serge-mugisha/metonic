@@ -39,6 +39,21 @@
         "pattern": "^(?!-)[a-z0-9-]+(\\.[a-z0-9-]+)+$"
       }
     },
+    "accountDomains": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(?!-)[a-z0-9-]+(\\.[a-z0-9-]+)+$"
+      }
+    },
+    "detectOn": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^\\/[^*?#\\s]*$"
+      }
+    },
     "homepage": {
       "type": "string",
       "format": "uri"

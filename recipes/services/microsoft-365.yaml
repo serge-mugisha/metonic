@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: microsoft-365
+name: Microsoft 365
+category: software
+domains:
+  - microsoft365.com
+  - office.com
+accountDomains:
+  - microsoft.com
+homepage: https://www.microsoft365.com
+thirdPartyBilling: [apple, google-play, other]
+actions:
+  cancel:
+    level: info
+    url: https://account.microsoft.com/services
+    instructions:
+      - Sign in to your Microsoft account in this browser. This opens Services & subscriptions.
+      - Find your Microsoft 365 subscription and choose "Manage".
+      - Choose "Cancel subscription" (or "Turn off recurring billing") and confirm.
+  pause:
+    availability: none
+verification:
+  status: unverified

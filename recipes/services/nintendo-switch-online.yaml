@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: nintendo-switch-online
+name: Nintendo Switch Online
+category: gaming
+domains:
+  - nintendo.com
+homepage: https://www.nintendo.com/switch/online/
+actions:
+  cancel:
+    level: info
+    url: https://accounts.nintendo.com/portal
+    instructions:
+      - Sign in to your Nintendo Account in this browser.
+      - Open the Nintendo Switch Online or "Online Services" section.
+      - Choose to turn off (terminate) automatic renewal and confirm.
+    notes: >-
+      Turn off auto-renewal at least 48 hours before the membership expires. Memberships
+      bought on the console's Nintendo eShop may need to be managed there.
+  pause:
+    availability: none
+verification:
+  status: unverified

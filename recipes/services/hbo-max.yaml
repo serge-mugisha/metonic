@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: hbo-max
+name: HBO Max
+category: streaming
+domains:
+  - hbomax.com
+  - max.com
+homepage: https://www.hbomax.com
+thirdPartyBilling: [apple, google-play, amazon, roku, carrier, other]
+actions:
+  cancel:
+    level: info
+    url: https://www.hbomax.com/subscription
+    instructions:
+      - Sign in to HBO Max in this browser and open the Subscription page.
+      - Choose "Cancel Your Subscription" and continue past any offers.
+      - Confirm. You can keep watching until the end of the billing period.
+    notes: >-
+      If HBO Max is billed by Hulu, YouTube TV, an app store or a TV or internet provider,
+      cancel with them. A 12-month plan paid monthly keeps billing monthly until the year ends.
+  pause:
+    availability: none
+verification:
+  status: unverified

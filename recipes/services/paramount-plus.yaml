@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: paramount-plus
+name: Paramount+
+category: streaming
+domains:
+  - paramountplus.com
+homepage: https://www.paramountplus.com
+thirdPartyBilling: [apple, google-play, amazon, roku, other]
+actions:
+  cancel:
+    level: info
+    url: https://www.paramountplus.com/account/
+    instructions:
+      - Sign in to Paramount+ in this browser and open Account.
+      - Under "Subscription & Billing", choose "Cancel Subscription".
+      - Continue past any offers and confirm.
+  pause:
+    availability: unknown
+verification:
+  status: unverified

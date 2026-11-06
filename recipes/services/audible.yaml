@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: audible
+name: Audible
+category: education
+domains:
+  - audible.com
+homepage: https://www.audible.com
+thirdPartyBilling: [apple, google-play, other]
+actions:
+  cancel:
+    level: info
+    url: https://www.audible.com/account/overview
+    instructions:
+      - Sign in to Audible in this browser and open Account Details.
+      - Choose "Cancel membership" and go through the questions and offers.
+      - Confirm. Spend your remaining credits first, because unused credits are lost when the membership ends.
+  pause:
+    availability: retention-offer
+    maxDuration: P90D
+    autoResumes: true
+    action:
+      level: info
+      url: https://www.audible.com/account/overview
+      instructions:
+        - Sign in to Audible in this browser and open Account Details.
+        - Start "Cancel membership"; an eligible monthly membership is offered a pause of 30, 60 or 90 days.
+        - Choose the length and confirm. Billing resumes automatically afterwards.
+      notes: Pausing is usually allowed once every 12 months and not for annual memberships.
+verification:
+  status: unverified
+  regions: [US]

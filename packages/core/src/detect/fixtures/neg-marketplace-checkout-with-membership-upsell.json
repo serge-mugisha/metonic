@@ -9,5 +9,5 @@
   "expected": {
     "isLikelyCheckout": false
   },
-  "knownIssue": "An upsell banner on a one-off checkout looks exactly like a subscription checkout to the heuristics. Needs layout awareness or the AI pass (#24)."
+  "knownIssue": "An upsell banner on a one-off checkout looks exactly like a subscription checkout to the heuristics. Known services avoid this with recipe `detectOn` (Amazon Prime only detects on /prime pages); unknown sites in all-sites mode still need layout awareness or the AI pass (#24)."
 }

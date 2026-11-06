@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=../schema.json
+schemaVersion: 0
+id: duolingo
+name: Duolingo Super
+category: education
+domains:
+  - duolingo.com
+homepage: https://www.duolingo.com
+thirdPartyBilling: [apple, google-play]
+actions:
+  cancel:
+    level: info
+    url: https://www.duolingo.com/settings/subscription
+    instructions:
+      - Sign in to Duolingo in this browser and open Settings > Subscription.
+      - Choose "Cancel subscription" and confirm.
+    notes: >-
+      Most Duolingo subscriptions are bought in the mobile app. Those can only be cancelled
+      through the App Store or Google Play.
+  pause:
+    availability: none
+verification:
+  status: unverified

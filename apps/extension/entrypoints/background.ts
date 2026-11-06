@@ -1,7 +1,7 @@
 import { daysUntil, formatMoney, formatRecurring, nextChargeOn, toIsoDate } from '@metonic/core';
 import { dismissDetection, recordDetection, trackDetection } from '../src/actions';
 import type { DetectedReply, Message } from '../src/messages';
-import { ALL_SITES, detectionAccess } from '../src/permissions';
+import { detectionAccess, detectorMatches } from '../src/permissions';
 import { pendingDetections, sentReminders, settings, subscriptions } from '../src/storage';
 
 const DETECTOR_ID = 'metonic-checkout-detector';
@@ -47,8 +47,7 @@ async function setup() {
 
 /** (Re)register the checkout detector on the sites the user has allowed, or remove it if there are none. */
 async function registerDetector() {
-  const { universal, granted } = await detectionAccess();
-  const matches = universal ? [ALL_SITES] : granted;
+  const matches = detectorMatches(await detectionAccess());
   const existing = await browser.scripting.getRegisteredContentScripts({ ids: [DETECTOR_ID] });
 
   if (matches.length === 0) {
