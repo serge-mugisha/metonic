@@ -72,7 +72,7 @@ The most useful thing you can do is **add or fix a recipe**. It takes about five
 and no coding. See [recipes/README.md](recipes/README.md). For code changes, see
 [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Design background: [architecture](docs/architecture.md) · [recipe spec](docs/recipe-spec.md) · [research notes](docs/research.md)
+Privacy: [PRIVACY.md](PRIVACY.md) · Design background: [architecture](docs/architecture.md) · [recipe spec](docs/recipe-spec.md) · [research notes](docs/research.md)
 
 ## License
 
