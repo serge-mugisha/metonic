@@ -1,6 +1,14 @@
 import { recipes } from '../../src/recipes';
 import { AllSitesToggle, EnableKnownServices, useDetectionAccess } from '../../src/ui/DetectionAccess';
 
+const EXAMPLE_IDS = ['netflix', 'spotify', 'disney-plus'];
+
+/** A few recognizable names for the explanation, falling back to whatever recipes exist. */
+function examples(): string {
+  const preferred = EXAMPLE_IDS.flatMap((id) => recipes.filter((r) => r.id === id));
+  return (preferred.length > 0 ? preferred : recipes.slice(0, 3)).map((r) => r.name).join(', ');
+}
+
 export function App() {
   const access = useDetectionAccess();
 
@@ -16,12 +24,8 @@ export function App() {
         <li>
           <h2>Turn on checkout detection</h2>
           <p>
-            To spot a checkout, Metonic reads the pages of the {recipes.length} services it knows, such as{' '}
-            {recipes
-              .slice(0, 3)
-              .map((r) => r.name)
-              .join(', ')}
-            . Chrome will ask you to allow that. Pages are checked inside your browser. Nothing is sent anywhere, and
+            To spot a checkout, Metonic reads the pages of the {recipes.length} services it knows, such as {examples()}.
+            Chrome will ask you to allow that. Pages are checked inside your browser. Nothing is sent anywhere, and
             Metonic has no server or account.
           </p>
           {access && <EnableKnownServices access={access} />}
