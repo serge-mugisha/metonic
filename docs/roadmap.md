@@ -6,27 +6,21 @@ is a summary; issues are the source of truth.
 
 ## v0.1 Tracker: useful with zero AI
 
-Done in the initial scaffold:
-- Subscription model, monthly totals, billing anchors
-- Recipe schema v0, validator, JSON Schema for editors
-- Heuristic checkout detection (known services after one-click opt-in, all sites optional)
-- Notification prompt: "Subscribing to X? Track it"
-- Popup: totals, detected, tracked, manual add, "Track this page"
+Done (first pre-release: [v0.1.0-beta.1](https://github.com/serge-mugisha/metonic/releases/tag/v0.1.0-beta.1)):
+- Subscription model, monthly/yearly totals, billing anchors, correct minor units per currency
+- Recipe schema v0 with validator and JSON Schema, plus 23 services (`info` level, unverified)
+- Heuristic checkout detection in a dozen languages, with 23 regression fixtures
+- In-page "Subscribing to X? Track it" prompt, or system notification, or both
+- Popup: totals, detected, tracked, edit, "Track this page", manual add
+- Overview page: upcoming charges, spend by category, cancelled savings
+- Settings: detection access, reminder lead time, JSON export/import
 - Trial-ending and renewal reminders
+- All site access optional, with a welcome page (no install-time host permissions)
+- Lint, unit tests, browser e2e in CI; tag-driven release workflow; privacy policy; icon
 
 Open:
-- [#1](https://github.com/serge-mugisha/metonic/issues/1) Edit a tracked subscription
-- [#2](https://github.com/serge-mugisha/metonic/issues/2) Export and import subscriptions as JSON
-- [#3](https://github.com/serge-mugisha/metonic/issues/3) Verify the seed recipes
-- [#4](https://github.com/serge-mugisha/metonic/issues/4) Info recipes for the 20 most common subscriptions
-- [#5](https://github.com/serge-mugisha/metonic/issues/5) Chrome Web Store listing, privacy policy and release workflow
-- [#6](https://github.com/serge-mugisha/metonic/issues/6) In-page prompt when a checkout is detected
-- [#7](https://github.com/serge-mugisha/metonic/issues/7) Dashboard page
-- [#8](https://github.com/serge-mugisha/metonic/issues/8) Locale-aware price parsing
-- [#9](https://github.com/serge-mugisha/metonic/issues/9) Detection regression fixtures
-- [#10](https://github.com/serge-mugisha/metonic/issues/10) End-to-end smoke test in CI
-- [#11](https://github.com/serge-mugisha/metonic/issues/11) Lint and format setup
-- [#12](https://github.com/serge-mugisha/metonic/issues/12) Real icon and branding
+- [#3](https://github.com/serge-mugisha/metonic/issues/3) Verify recipes on real accounts (needs people with subscriptions)
+- [#5](https://github.com/serge-mugisha/metonic/issues/5) First Chrome Web Store submission
 
 ## v0.2 Actions
 
