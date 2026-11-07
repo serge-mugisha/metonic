@@ -62,8 +62,8 @@ Source of truth for the store listing, so changes go through review like code.
 
 | Asset | Size | Status |
 |---|---|---|
-| Icon | 128×128 | `apps/extension/public/icon/128.png` (see #12) |
-| Screenshots | 1280×800, 1–5 | TODO: popup with list, in-page prompt, overview, settings, welcome |
+| Icon | 128×128 | `apps/extension/public/icon/128.png` (sources in `apps/extension/brand/`) |
+| Screenshots | 1280×800, 1–5 | `docs/store/*.png`. Regenerate with `STORE_SCREENSHOTS=1 npm run e2e` |
 | Small promo tile | 440×280 | TODO |
 
 ## Releasing

@@ -1,3 +1,5 @@
+<img src="apps/extension/public/icon/128.png" width="72" alt="" align="right">
+
 # Metonic
 
 **Every subscription in one place: open source, local-first, bring your own AI.**
@@ -10,6 +12,8 @@ using community-maintained "recipes" for each service.
 > the recurring period after which the lunar and solar calendars line up again.
 
 **Status:** early development (v0.1 in progress). Not on the Chrome Web Store yet.
+
+![Metonic asking "Subscribing to Netflix?" on a checkout page](docs/store/1-prompt.png)
 
 ## Why
 
